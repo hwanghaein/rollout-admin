@@ -57,7 +57,7 @@ const MenuClient = ({ menuItems }: { menuItems: MenuItem[] }) => {
     <div>
       <div className="p-5 flex flex-col border-[1px] border-solid border-gray4 rounded-md mb-10">
         <div className="flex pb-4 border-b-[1px] border-gray-4 justify-between items-center">
-          <div className="text-lg text-dark2">메뉴 검색</div>
+          <div className="text-md text-dark2">메뉴 검색</div>
           <div className="border-[1px] border-solid border-gray-4 rounded-md relative overflow-hidden">
             <input
               type="text"

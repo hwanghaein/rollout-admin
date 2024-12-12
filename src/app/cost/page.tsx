@@ -13,7 +13,7 @@ export default function Page() {
 
   return (
     <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20">
-      <span className="text-dark2 text-3xl mb-5">MENU COST</span>
+      <span className="text-dark2 text-2xl mb-5">MENU COST</span>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-left text-dark2">
           <thead className="bg-gray-300">

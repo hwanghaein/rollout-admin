@@ -1,8 +1,9 @@
 export default function Page() {
   return (
     <div className="p-4 text-xs">
+       <span className="text-dark2 text-xl mb-5">메뉴 이름</span>
       {/* 표 1: 판매가 및 개수 입력 */}
-      <div className="mb-4">
+      <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4">
           <div className="overflow-hidden border border-gray-300">
             <div className="bg-gray-300 font-bold text-center px-2 py-1">개당 판매가</div>

@@ -61,7 +61,7 @@ export default function Header() {
 
           {/* 햄버거 버튼 - 모바일과 태블릿에서만 보이도록 설정 */}
           <button className="md:hidden p-2" onClick={toggleMenu}>
-            <FaBars className="text-3xl text-gray1" />
+            <FaBars className="text-2xl text-gray1" />
           </button>
         </div>
       </header>

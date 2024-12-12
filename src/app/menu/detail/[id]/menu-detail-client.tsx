@@ -22,7 +22,7 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
 
   return (
     <>
-      <span className="text-dark2 text-3xl mb-10">
+      <span className="text-dark2 text-2xl mb-10">
         {formatCategory(menuItem.category)}
       </span>
       <div className="flex flex-col md:flex-row gap-10">

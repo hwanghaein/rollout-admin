@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Page() {
   return (
     <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20">
-      <span className="text-dark2 text-3xl mb-10">ROLL OUT COFFEE</span>
+      <span className="text-dark2 text-2xl mb-10">ROLL OUT COFFEE</span>
       <Image
         src="/images/about-rollout/plane_img.png"
         alt="비행기"
