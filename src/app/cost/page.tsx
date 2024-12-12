@@ -18,16 +18,16 @@ export default function Page() {
         <table className="min-w-full text-sm text-left text-dark2">
           <thead className="bg-gray-300">
             <tr>
-              <th className="px-4 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
                 메뉴명
               </th>
-              <th className="px-4 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
                 원가
               </th>
-              <th className="px-4 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
                 판매가
               </th>
-              <th className="px-4 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
                 마진율
               </th>
             </tr>
@@ -39,12 +39,12 @@ export default function Page() {
                 className="border-b border-gray-200 hover:bg-gray-100 hover:cursor-pointer "
                 onClick={() => handleMenuClick(item.id)}
               >
-                <td className="px-4 py-3 border-x border-gray-200 break-words max-w-[110px] hover:underline hover:text-blue-600">
+                <td className="px-4 py-3 border-x border-gray-200 break-words max-w-[115px] hover:underline hover:text-blue-600">
                   {item.name}
                 </td>
-                <td className="px-4 py-3 border-x border-gray-200">₩{item.cost}</td>
-                <td className="px-4 py-3 border-x border-gray-200">₩{item.price}</td>
-                <td className="px-4 py-3 border-x border-gray-200">{item.margin}</td>
+                <td className="px-3 py-2 border-x border-gray-200">₩{item.cost}</td>
+                <td className="px-3 py-2 border-x border-gray-200">₩{item.price}</td>
+                <td className="px-3 py-2 border-x border-gray-200">{item.margin}</td>
               </tr>
             ))}
           </tbody>
