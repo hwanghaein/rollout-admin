@@ -1,0 +1,9 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off", // 'any' 타입 사용 허용
+    "@typescript-eslint/explicit-module-boundary-types": "off", // 함수 반환 타입 명시 요구 비활성화
+      "@typescript-eslint/no-unused-vars": "off",
+      "react/no-unescaped-entities": "off"
+  }
+}
