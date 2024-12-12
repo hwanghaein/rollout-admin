@@ -38,17 +38,23 @@ export default function Header() {
           {/* 메뉴바 - 데스크탑에서만 보이도록 설정 */}
           <nav className="hidden md:flex flex-grow justify-end whitespace-nowrap">
             <ul className="text-13 text-gray1 flex h-16 items-center m-0 p-0 space-x-1">
+            <Link href={"/cost"} className="px-5 h-full flex items-center justify-center">
+                <li>단가 계산</li>
+              </Link>
+              <Link href={"/recipe"} className="px-5 h-full flex items-center justify-center">
+                <li>레시피</li>
+              </Link>
               <Link href={"/menu"} className="px-5 h-full flex items-center justify-center">
-                <li>MENU</li>
+                <li>메뉴</li>
               </Link>
               <Link href={"/store"} className="px-5 h-full flex items-center justify-center">
-                <li>STORE</li>
+                <li>스토어</li>
               </Link>
               <Link href={"/about-rollout"} className="px-5 h-full flex items-center justify-center">
-                <li>ROLL OUT COFFEE</li>
+                <li>롤아웃 커피</li>
               </Link>
               <Link href={"/photo-gallery"} className="px-5 h-full flex items-center justify-center">
-                <li>PHOTO GALLERY</li>
+                <li>포토 갤러리</li>
               </Link>
             </ul>
           </nav>
@@ -75,17 +81,23 @@ export default function Header() {
         </button>
         <ul className="text-13 text-gray1 flex flex-col items-start text-left text-base">
           <li className="py-10 pl-4 w-full text-left border-gray3 bg-brown2"></li>
+          <Link href={"/cost"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+            <li>단가 계산</li>
+          </Link>
+          <Link href={"/recipe"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+            <li>레시피</li>
+          </Link>
           <Link href={"/menu"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
-            <li>MENU</li>
+            <li>메뉴</li>
           </Link>
           <Link href={"/store"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
-            <li>STORE</li>
+            <li>스토어</li>
           </Link>
           <Link href={"/about-rollout"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
-            <li>ROLL OUT COFFEE</li>
+            <li>롤아웃 커피</li>
           </Link>
           <Link href={"/photo-gallery"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
-            <li>PHOTO GALLERY</li>
+            <li>포토 갤러리</li>
           </Link>
         </ul>
       </aside>
