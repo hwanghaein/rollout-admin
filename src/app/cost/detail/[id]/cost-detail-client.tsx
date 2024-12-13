@@ -2,13 +2,116 @@
 
 import { useState } from "react";
 import { CostMenu } from "@/types/cost-menu";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import fireStore from "../../../../../firebase/firestore"; // Firebase Firestore 경로
 
 export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
-  const [editingPrice, setEditingPrice] = useState(false);
-  const [editingQuantity, setEditingQuantity] = useState(false);
-  const [editingIngredients, setEditingIngredients] = useState(false);
+  const [editingPrice, setEditingPrice] = useState(false); // "개당 판매가" <수정중> 상태관리
+  const [newPrice, setNewPrice] = useState(menu.pricePerPiece); // 수정된 새로운 "개당 판매가"
+
+  const [editingQuantity, setEditingQuantity] = useState(false); // "판매 개수" <수정중> 상태관리
+  const [newQuantity, setNewQuantity] = useState(menu.salesQuantity); // 수정된 새로운 "판매 개수"
+
+  const [editingIngredients, setEditingIngredients] = useState(false); // "재료 관련 표" <수정중> 상태관리
   const [ingredients, setIngredients] = useState(menu.ingredients);
-  const [showAddButton, setShowAddButton] = useState(false);
+
+  const [updatedMenu, setUpdatedMenu] = useState(menu); // 업데이트된 메뉴 데이터 상태
+
+  interface Ingredient {
+    name: string;
+    purchasePrice: number;
+    purchaseQuantity: number;
+    usageQuantity: number;
+  }
+
+  // "개당 판매가" 수정 토글 관리
+  const handleEditPrice = () => {
+    setEditingPrice(true);
+  };
+
+  // "판매 개수" 수정 토글 관리
+  const handleEditQuantity = () => {
+    setEditingQuantity(true);
+  };
+
+  // "재료" 수정 토글 관리
+  const handleEditIngredients = () => {
+    setEditingIngredients(!editingIngredients);
+  };
+
+  // "개당 판매가" firebase 데이터 수정
+  const handleSavePrice = async () => {
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", updatedMenu.id);
+      await updateDoc(menuDoc, {
+        pricePerPiece: newPrice,
+      });
+
+      const updatedDoc = await getDoc(menuDoc);
+      if (updatedDoc.exists()) {
+        setUpdatedMenu(updatedDoc.data() as CostMenu);
+      }
+      setEditingPrice(false);
+    } catch (error) {
+      console.error("Error updating price: ", error);
+    }
+  };
+
+  // "판매 개수" firebase 데이터 수정
+  const handleSaveQuantity = async () => {
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", updatedMenu.id); // 메뉴 문서 참조
+      await updateDoc(menuDoc, {
+        salesQuantity: newQuantity, // 판매 개수 업데이트
+      });
+
+      const updatedDoc = await getDoc(menuDoc);
+      if (updatedDoc.exists()) {
+        setUpdatedMenu(updatedDoc.data() as CostMenu); // 업데이트된 데이터 반영
+      }
+
+      setEditingQuantity(false); // 수정 모드 종료
+    } catch (error) {
+      console.error("Error updating quantity: ", error);
+    }
+  };
+
+  // "재료" firebase 데이터 수정
+  const handleSaveIngredients = async () => {
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+      await updateDoc(menuDoc, {
+        ingredients: ingredients, // 수정된 재료 데이터 전체 반영
+      });
+
+      const updatedDoc = await getDoc(menuDoc);
+      if (updatedDoc.exists()) {
+        // Firestore에서 가져온 최신 데이터로 업데이트
+        const updatedMenu = updatedDoc.data() as CostMenu;
+        setIngredients(updatedMenu.ingredients); // 상태 갱신
+      }
+      setEditingIngredients(false); // 수정 완료 후 모드 종료
+    } catch (error) {
+      console.error("Error updating ingredients: ", error);
+    }
+  };
+
+  // 재료명, 구매가, 구매량, 사용량을 수정하는 함수
+  const handleIngredientChange = (
+    index: number,
+    field: keyof Ingredient,
+    value: string | number
+  ) => {
+    const updatedIngredients = [...ingredients];
+
+    if (typeof value === "string" && field === "name") {
+      updatedIngredients[index][field] = value;
+    } else if (typeof value === "number") {
+      updatedIngredients[index][field] = value;
+    }
+
+    setIngredients(updatedIngredients);
+  };
 
   const handleAddRow = () => {
     setIngredients([
@@ -20,23 +123,6 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
         usageQuantity: 0,
       },
     ]);
-  };
-
-  const handleEditRow = () => {
-    setShowAddButton(true);
-    setEditingIngredients(true);
-  };
-
-  const toggleEditingPrice = () => {
-    setEditingPrice(!editingPrice);
-  };
-
-  const toggleEditingQuantity = () => {
-    setEditingQuantity(!editingQuantity);
-  };
-
-  const toggleEditingIngredients = () => {
-    setEditingIngredients(!editingIngredients);
   };
 
   return (
@@ -55,13 +141,14 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                     <input
                       type="number"
                       className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
-                      placeholder={String(menu.pricePerPiece)}
+                      value={newPrice}
+                      onChange={(e) => setNewPrice(Number(e.target.value))}
                     />
                     <span className="ml-1">원</span>
                   </div>
                 ) : (
                   <div className="w-full text-center">
-                    {menu.pricePerPiece}원
+                    {updatedMenu.pricePerPiece}원
                   </div>
                 )}
               </div>
@@ -69,7 +156,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             <div className="flex">
               <button
                 className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs"
-                onClick={toggleEditingPrice}
+                onClick={editingPrice ? handleSavePrice : handleEditPrice}
               >
                 {editingPrice ? "완료" : "수정"}
               </button>
@@ -86,13 +173,14 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                     <input
                       type="number"
                       className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
-                      placeholder={String(menu.salesQuantity)}
+                      value={newQuantity}
+                      onChange={(e) => setNewQuantity(Number(e.target.value))}
                     />
                     <span className="ml-1">개</span>
                   </div>
                 ) : (
                   <div className="w-full text-center">
-                    {menu.salesQuantity}개
+                    {updatedMenu.salesQuantity}개
                   </div>
                 )}
               </div>
@@ -100,7 +188,9 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             <div className="flex">
               <button
                 className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs"
-                onClick={toggleEditingQuantity}
+                onClick={
+                  editingQuantity ? handleSaveQuantity : handleEditQuantity
+                }
               >
                 {editingQuantity ? "완료" : "수정"}
               </button>
@@ -152,11 +242,9 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                         type="text"
                         className="w-[105px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
                         placeholder={String(ingredient.name)}
-                        onChange={(e) => {
-                          const updatedIngredients = [...ingredients];
-                          updatedIngredients[index].name = e.target.value;
-                          setIngredients(updatedIngredients);
-                        }}
+                        onChange={(e) =>
+                          handleIngredientChange(index, "name", e.target.value)
+                        }
                       />
                     ) : (
                       <div>{ingredient.name || "-"}</div>
@@ -173,13 +261,13 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                             type="number"
                             className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
                             placeholder={String(ingredient.purchasePrice)}
-                            onChange={(e) => {
-                              const updatedIngredients = [...ingredients];
-                              updatedIngredients[index].purchasePrice = Number(
-                                e.target.value
-                              );
-                              setIngredients(updatedIngredients);
-                            }}
+                            onChange={(e) =>
+                              handleIngredientChange(
+                                index,
+                                "purchasePrice",
+                                Number(e.target.value)
+                              )
+                            }
                           />
                           <span className="ml-1">원</span>
                         </>
@@ -199,12 +287,13 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                             type="number"
                             className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
                             placeholder={String(ingredient.purchaseQuantity)}
-                            onChange={(e) => {
-                              const updatedIngredients = [...ingredients];
-                              updatedIngredients[index].purchaseQuantity =
-                                Number(e.target.value);
-                              setIngredients(updatedIngredients);
-                            }}
+                            onChange={(e) =>
+                              handleIngredientChange(
+                                index,
+                                "purchaseQuantity",
+                                Number(e.target.value)
+                              )
+                            }
                           />
                           <span className="ml-1">g</span>
                         </>
@@ -256,7 +345,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
           <div className="flex">
             <button
               className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs mt-1"
-              onClick={toggleEditingIngredients}
+              onClick={handleEditIngredients}
             >
               {editingIngredients ? "완료" : "수정"}
             </button>
