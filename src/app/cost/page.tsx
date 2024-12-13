@@ -1,12 +1,11 @@
-// import { costMenuList } from "@/mock/cost-menu-list";
 import { CostMenu } from '@/types/cost-menu';
 import CostClient from './cost-client';
 import fetchCostMenuItems from "@/utils/fetchCostMenuItems";
 
 export default async function Page() {
-const costMenuList: CostMenu[] = await fetchCostMenuItems();
+  const costMenuList: CostMenu[] = await fetchCostMenuItems();
 
- return (
+  return (
     <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20">
       <span className="text-dark2 text-2xl mb-5">MENU COST</span>
       <div className="overflow-x-auto">
@@ -28,7 +27,7 @@ const costMenuList: CostMenu[] = await fetchCostMenuItems();
             </tr>
           </thead>
           <tbody>
-              <CostClient costMenuList={costMenuList} /> 
+            <CostClient costMenuList={costMenuList} /> 
           </tbody>
         </table>
       </div>

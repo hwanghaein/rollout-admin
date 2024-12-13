@@ -7,12 +7,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <div className="flex">
-              <button className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs">
-                수정
-              </button>
-            </div>
-            <div className="overflow-hidden border border-gray-300 mt-1">
+            <div className="overflow-hidden border border-gray-300 mb-1">
               <div className="bg-gray-300 font-bold text-center px-2 py-1">
                 개당 판매가
               </div>
@@ -24,14 +19,15 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 />
               </div>
             </div>
-          </div>
-          <div>
             <div className="flex">
               <button className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs">
                 수정
               </button>
             </div>
-            <div className="overflow-hidden border border-gray-300 mt-1">
+          </div>
+          <div>
+
+            <div className="overflow-hidden border border-gray-300 mb-1">
               <div className="bg-gray-300 font-bold px-2 py-1 text-center">
                 판매 개수
               </div>
@@ -43,18 +39,19 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 />
               </div>
             </div>
+            <div className="flex">
+              <button className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs">
+                수정
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="mb-4">
         <div>
-          <div className="flex">
-            <button className="ml-auto px-1 py-1 rounded-md cursor-pointer bg-white border border-gray-300 text-black text-xs">
-              수정
-            </button>
-          </div>
-          <table className="min-w-full rounded-lg border border-gray-300 mt-1">
+ 
+          <table className="min-w-full rounded-lg border border-gray-300 mb-1">
             <thead className="bg-gray-300">
               <tr>
                 <th className="px-1 py-1 border-r border-b text-center min-w-[90px]">
@@ -116,6 +113,11 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
               ))}
             </tbody>
           </table>
+          <div className="flex">
+              <button className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs">
+                수정
+              </button>
+            </div>
         </div>
       </div>
 
