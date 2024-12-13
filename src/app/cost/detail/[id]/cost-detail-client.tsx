@@ -4,9 +4,11 @@ import { useState } from "react";
 import { CostMenu } from "@/types/cost-menu";
 
 export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null); 
+  const [editingPrice, setEditingPrice] = useState(false);
+  const [editingQuantity, setEditingQuantity] = useState(false);
+  const [editingIngredients, setEditingIngredients] = useState(false);
   const [ingredients, setIngredients] = useState(menu.ingredients);
-  const [showAddButton, setShowAddButton] = useState(false); 
+  const [showAddButton, setShowAddButton] = useState(false);
 
   const handleAddRow = () => {
     setIngredients([
@@ -16,13 +18,25 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
         purchasePrice: 0,
         purchaseQuantity: 0,
         usageQuantity: 0,
-        unit: "g", 
       },
     ]);
   };
 
   const handleEditRow = () => {
-    setShowAddButton(true); 
+    setShowAddButton(true);
+    setEditingIngredients(true);
+  };
+
+  const toggleEditingPrice = () => {
+    setEditingPrice(!editingPrice);
+  };
+
+  const toggleEditingQuantity = () => {
+    setEditingQuantity(!editingQuantity);
+  };
+
+  const toggleEditingIngredients = () => {
+    setEditingIngredients(!editingIngredients);
   };
 
   return (
@@ -31,40 +45,64 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <div className="overflow-hidden border border-gray-300 mb-1">
+            <div className="overflow-hidden border border-gray-300 mb-1 min-h-[52px]">
               <div className="bg-gray-300 font-bold text-center px-2 py-1">
                 개당 판매가
               </div>
               <div className="bg-white px-1 py-1">
-                <input
-                  type="number"
-                  className="w-full text-center focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder={String(menu.pricePerPiece)}
-                />
+                {editingPrice ? (
+                  <div className="text-center">
+                    <input
+                      type="number"
+                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                      placeholder={String(menu.pricePerPiece)}
+                    />
+                    <span className="ml-1">원</span>
+                  </div>
+                ) : (
+                  <div className="w-full text-center">
+                    {menu.pricePerPiece}원
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex">
-              <button className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs">
-                수정
+              <button
+                className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs"
+                onClick={toggleEditingPrice}
+              >
+                {editingPrice ? "완료" : "수정"}
               </button>
             </div>
           </div>
           <div>
-            <div className="overflow-hidden border border-gray-300 mb-1">
+            <div className="overflow-hidden border border-gray-300 mb-1 min-h-[52px]">
               <div className="bg-gray-300 font-bold px-2 py-1 text-center">
                 판매 개수
               </div>
               <div className="bg-white px-2 py-1">
-                <input
-                  type="number"
-                  className="w-full text-center focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder={String(menu.salesQuantity)}
-                />
+                {editingQuantity ? (
+                  <div className="text-center">
+                    <input
+                      type="number"
+                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                      placeholder={String(menu.salesQuantity)}
+                    />
+                    <span className="ml-1">개</span>
+                  </div>
+                ) : (
+                  <div className="w-full text-center">
+                    {menu.salesQuantity}개
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex">
-              <button className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs">
-                수정
+              <button
+                className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs"
+                onClick={toggleEditingQuantity}
+              >
+                {editingQuantity ? "완료" : "수정"}
               </button>
             </div>
           </div>
@@ -76,66 +114,136 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
           <table className="min-w-full rounded-lg border border-gray-300">
             <thead className="bg-gray-300">
               <tr>
-                <th className="px-1 py-1 border-r border-b text-center min-w-[90px]">
+                <th
+                  className="px-1 py-1 border-r border-b text-center"
+                  style={{ minWidth: "90px" }}
+                >
                   재료명
                 </th>
-                <th className="px-1 py-1 border-r border-b text-center min-w-[50px]">
+                <th
+                  className="px-1 py-1 border-r border-b text-center"
+                  style={{ minWidth: "60px" }}
+                >
                   구매가
                 </th>
-                <th className="px-1 py-1 border-r border-b text-center">
+                <th
+                  className="px-1 py-1 border-r border-b text-center"
+                  style={{ minWidth: "60px" }}
+                >
                   구매량
                 </th>
-                <th className="px-1 py-1 border-b text-center">사용량</th>
+                <th
+                  className="px-1 py-1 border-b text-center"
+                  style={{ minWidth: "60px" }}
+                >
+                  사용량
+                </th>
               </tr>
             </thead>
-            {/* 재료 */}
             <tbody>
               {ingredients.map((ingredient, index) => (
                 <tr key={index}>
-                  <td className="px-1 py-1 border-r border-b text-center">
-                    {ingredient.name}
-                  </td>
-                  <td className="px-1 py-1 border-r border-b">
-                    <div className="flex items-center">
-                      <input
-                        type="number"
-                        className="w-full border-gray-300 rounded-md"
-                        placeholder={String(ingredient.purchasePrice)}
+                  <td
+                    className="px-1 py-1 border-r border-b text-center"
+                    style={{ minWidth: "90px" }}
+                  >
+                    {editingIngredients ? (
+                      <input // 재료명
+                        type="text"
+                        className="w-[105px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                        placeholder={String(ingredient.name)}
+                        onChange={(e) => {
+                          const updatedIngredients = [...ingredients];
+                          updatedIngredients[index].name = e.target.value;
+                          setIngredients(updatedIngredients);
+                        }}
                       />
-                      <span className="ml-1">원</span>
+                    ) : (
+                      <div>{ingredient.name || "-"}</div>
+                    )}
+                  </td>
+                  <td
+                    className="px-1 py-1 border-r border-b text-center"
+                    style={{ minWidth: "60px" }}
+                  >
+                    <div className="flex items-center justify-center">
+                      {editingIngredients ? (
+                        <>
+                          <input // 구매가
+                            type="number"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            placeholder={String(ingredient.purchasePrice)}
+                            onChange={(e) => {
+                              const updatedIngredients = [...ingredients];
+                              updatedIngredients[index].purchasePrice = Number(
+                                e.target.value
+                              );
+                              setIngredients(updatedIngredients);
+                            }}
+                          />
+                          <span className="ml-1">원</span>
+                        </>
+                      ) : (
+                        <div>{ingredient.purchasePrice}원</div>
+                      )}
                     </div>
                   </td>
-                  <td className="px-1 py-1 border-r border-b">
-                    <div className="flex items-center">
-                      <input
-                        type="number"
-                        className="w-full border-gray-300 rounded-md"
-                        placeholder={String(ingredient.purchaseQuantity)}
-                      />
-                      <select className="ml-2 border-gray-300 rounded-md">
-                        <option value="g">g</option>
-                        <option value="ml">ml</option>
-                      </select>
+                  <td
+                    className="px-1 py-1 border-r border-b text-center"
+                    style={{ minWidth: "60px" }}
+                  >
+                    <div className="flex items-center justify-center">
+                      {editingIngredients ? (
+                        <>
+                          <input // 구매량
+                            type="number"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            placeholder={String(ingredient.purchaseQuantity)}
+                            onChange={(e) => {
+                              const updatedIngredients = [...ingredients];
+                              updatedIngredients[index].purchaseQuantity =
+                                Number(e.target.value);
+                              setIngredients(updatedIngredients);
+                            }}
+                          />
+                          <span className="ml-1">g</span>
+                        </>
+                      ) : (
+                        <div>{ingredient.purchaseQuantity}g</div>
+                      )}
                     </div>
                   </td>
-                  <td className="px-1 py-1 border-b">
-                    <div className="flex items-center">
-                      <input
-                        type="number"
-                        className="w-full border-gray-300 rounded-md"
-                        placeholder={String(ingredient.usageQuantity)}
-                      />
-                      <select className="ml-2 border-gray-300 rounded-md">
-                        <option value="g">g</option>
-                        <option value="ml">ml</option>
-                      </select>
+                  <td
+                    className="px-1 py-1 border-b text-center"
+                    style={{ minWidth: "60px" }}
+                  >
+                    <div className="flex items-center justify-center">
+                      {editingIngredients ? (
+                        <>
+                          <input // 사용량
+                            type="number"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            placeholder={String(ingredient.usageQuantity)}
+                            onChange={(e) => {
+                              const updatedIngredients = [...ingredients];
+                              updatedIngredients[index].usageQuantity = Number(
+                                e.target.value
+                              );
+                              setIngredients(updatedIngredients);
+                            }}
+                          />
+                          <span className="ml-1">g</span>
+                        </>
+                      ) : (
+                        <div>{ingredient.usageQuantity}g</div>
+                      )}
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {showAddButton && (
+          {editingIngredients && (
             <div className="">
               <button
                 className="w-full px-2 py-1 text-md bg-[#e5e7eb] text-dark2 font-bold"
@@ -147,15 +255,12 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
           )}
           <div className="flex">
             <button
-              className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs mt-1"
-              onClick={handleEditRow}
+              className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs mt-1"
+              onClick={toggleEditingIngredients}
             >
-              수정
+              {editingIngredients ? "완료" : "수정"}
             </button>
           </div>
-
-          {/* 회색 플러스 버튼 */}
-
         </div>
       </div>
 
