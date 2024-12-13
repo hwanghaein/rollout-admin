@@ -157,7 +157,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <div className="overflow-hidden border border-gray-300 mb-1 min-h-[52px]">
+            <div className="overflow-hidden border border-gray-300 min-h-[52px]">
               <div className="bg-gray-300 font-bold text-center px-2 py-1">
                 개당 판매가
               </div>
@@ -197,7 +197,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             </div>
           </div>
           <div>
-            <div className="overflow-hidden border border-gray-300 mb-1 min-h-[52px]">
+            <div className="overflow-hidden border border-gray-300 min-h-[52px]">
               <div className="bg-gray-300 font-bold px-2 py-1 text-center">
                 판매 개수
               </div>
