@@ -345,7 +345,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
           <div className="flex">
             <button
               className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs mt-1"
-              onClick={handleEditIngredients}
+              onClick={editingIngredients ? handleSaveIngredients : handleEditIngredients}
             >
               {editingIngredients ? "완료" : "수정"}
             </button>
