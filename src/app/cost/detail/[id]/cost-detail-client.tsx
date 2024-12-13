@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { CostMenu } from "@/types/cost-menu";
+import { useEffect, useState } from "react";
+import { CostMenu, Ingredient } from "@/types/cost-menu";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import fireStore from "../../../../../firebase/firestore"; // Firebase Firestore 경로
+import fireStore from "../../../../../firebase/firestore"; 
+import { calculateTotalCost, calculateCostPerPiece, calculateMargin, calculateProfitPerPiece } from './../../../../utils/calculate'; 
 
 export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
+
   const [editingPrice, setEditingPrice] = useState(false); // "개당 판매가" <수정중> 상태관리
   const [newPrice, setNewPrice] = useState(menu.pricePerPiece); // 수정된 새로운 "개당 판매가"
   const [priceError, setPriceError] = useState<string>(""); // "개당 판매가" 에러 메시지 상태
@@ -19,13 +21,26 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
   const [ingredientsError, setIngredientsError] = useState<string>(""); // "개당 판매가" 에러 메시지 상태
 
   const [updatedMenu, setUpdatedMenu] = useState(menu); // 업데이트된 메뉴 데이터 상태
+  const [calculatedMenu, setCalculatedMenu] = useState<CostMenu>(menu);
 
-  interface Ingredient {
-    name: string;
-    purchasePrice: number;
-    purchaseQuantity: number;
-    usageQuantity: number;
-  }
+  useEffect(() => {
+    // ingredients 변경 시 계산된 값 업데이트
+    const totalCost = calculateTotalCost(ingredients);
+    const costPerPiece = calculateCostPerPiece(totalCost, newQuantity);
+    const margin = calculateMargin(newPrice, costPerPiece);
+    const profitPerPiece = calculateProfitPerPiece(newPrice, costPerPiece);
+  
+    setCalculatedMenu({
+      ...menu,
+      ingredients,
+      totalCost,
+      costPerPiece,
+      margin,
+      profitPerPiece,
+    });
+  }, [ingredients]); 
+  
+
 
   // "개당 판매가" 수정 토글 관리
   const handleEditPrice = () => {
@@ -40,6 +55,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
   // "재료" 수정 토글 관리
   const handleEditIngredients = () => {
     setEditingIngredients(!editingIngredients);
+
   };
 
   // "개당 판매가" firebase 데이터 수정
@@ -91,36 +107,42 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
   };
 
   // "재료" firebase 데이터 수정
-  const handleSaveIngredients = async () => {
-    for (const ingredient of ingredients) {
-      if (
-        ingredient.purchasePrice < 0 ||
-        ingredient.purchaseQuantity < 0 ||
-        ingredient.usageQuantity < 0
-      ) {
-        setIngredientsError("마이너스 값은 입력할 수 없습니다.");
-        return; // 유효하지 않으면 저장하지 않음
-      }
+const handleSaveIngredients = async () => {
+  for (const ingredient of ingredients) {
+    if (
+      ingredient.purchasePrice < 0 ||
+      ingredient.purchaseQuantity < 0 ||
+      ingredient.usageQuantity < 0
+    ) {
+      setIngredientsError("마이너스 값은 입력할 수 없습니다.");
+      return;
     }
+  }
 
-    try {
-      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
-      await updateDoc(menuDoc, {
-        ingredients: ingredients, // 수정된 재료 데이터 전체 반영
+  try {
+    const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+    await updateDoc(menuDoc, {
+      ingredients: ingredients, // 수정된 재료 데이터 전체 반영
+    });
+
+    const updatedDoc = await getDoc(menuDoc);
+    if (updatedDoc.exists()) {
+      const updatedMenu = updatedDoc.data() as CostMenu;
+      setIngredients(updatedMenu.ingredients); // 상태 갱신
+      setCalculatedMenu({
+        ...updatedMenu,
+        totalCost: calculateTotalCost(updatedMenu.ingredients),
+        costPerPiece: calculateCostPerPiece(calculateTotalCost(updatedMenu.ingredients), updatedMenu.salesQuantity),
+        margin: calculateMargin(updatedMenu.pricePerPiece, calculateCostPerPiece(calculateTotalCost(updatedMenu.ingredients), updatedMenu.salesQuantity)),
+        profitPerPiece: calculateProfitPerPiece(updatedMenu.pricePerPiece, calculateCostPerPiece(calculateTotalCost(updatedMenu.ingredients), updatedMenu.salesQuantity)),
       });
-
-      const updatedDoc = await getDoc(menuDoc);
-      if (updatedDoc.exists()) {
-        // Firestore에서 가져온 최신 데이터로 업데이트
-        const updatedMenu = updatedDoc.data() as CostMenu;
-        setIngredients(updatedMenu.ingredients); // 상태 갱신
-      }
-      setEditingIngredients(false); // 수정 완료 후 모드 종료
-      setIngredientsError("");
-    } catch (error) {
-      console.error("Error updating ingredients: ", error);
     }
-  };
+    setEditingIngredients(false); // 수정 완료 후 모드 종료
+    setIngredientsError("");
+  } catch (error) {
+    console.error("Error updating ingredients: ", error);
+  }
+};
 
   // 재료명, 구매가, 구매량, 사용량을 수정하는 함수
   const handleIngredientChange = (
@@ -405,8 +427,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
           </div>
         </div>
       </div>
-
-      {/* 계산 결과  */}
+{/* 계산 결과  */}
       <div className="mb-6">
         <table className="min-w-full rounded-lg border border-gray-300">
           <thead className="bg-gray-300">
@@ -421,7 +442,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 총 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {menu.totalCost}
+                {calculatedMenu.totalCost.toFixed(2)} 원
               </td>
             </tr>
             <tr>
@@ -429,28 +450,30 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 개당 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {menu.costPerPiece}
+                {calculatedMenu.costPerPiece.toFixed(2)} 원
               </td>
             </tr>
             <tr>
               <td className="px-2 py-1 border-r border-b text-center">
                 마진율
               </td>
-              <td className="px-2 py-1 border-b text-center">{menu.margin}</td>
+              <td className="px-2 py-1 border-b text-center">
+                {calculatedMenu.margin.toFixed(2)} %
+              </td>
             </tr>
             <tr>
               <td className="px-2 py-1 border-r border-b text-center">
                 개당 수익
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {menu.profitPerPiece}
+                {calculatedMenu.profitPerPiece.toFixed(2)} 원
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div className="flex">
-        <button className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-gray-500 border border-gray-500 text-white text-xs">
+        <button className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs">
           메뉴 삭제
         </button>
       </div>
