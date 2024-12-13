@@ -8,12 +8,15 @@ import fireStore from "../../../../../firebase/firestore"; // Firebase Firestore
 export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
   const [editingPrice, setEditingPrice] = useState(false); // "개당 판매가" <수정중> 상태관리
   const [newPrice, setNewPrice] = useState(menu.pricePerPiece); // 수정된 새로운 "개당 판매가"
+  const [priceError, setPriceError] = useState<string>(""); // "개당 판매가" 에러 메시지 상태
 
   const [editingQuantity, setEditingQuantity] = useState(false); // "판매 개수" <수정중> 상태관리
   const [newQuantity, setNewQuantity] = useState(menu.salesQuantity); // 수정된 새로운 "판매 개수"
+  const [quantityError, setQuantityError] = useState<string>(""); // "판매 개수" 에러 메시지 상태
 
   const [editingIngredients, setEditingIngredients] = useState(false); // "재료 관련 표" <수정중> 상태관리
   const [ingredients, setIngredients] = useState(menu.ingredients);
+  const [ingredientsError, setIngredientsError] = useState<string>(""); // "개당 판매가" 에러 메시지 상태
 
   const [updatedMenu, setUpdatedMenu] = useState(menu); // 업데이트된 메뉴 데이터 상태
 
@@ -41,6 +44,11 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
   // "개당 판매가" firebase 데이터 수정
   const handleSavePrice = async () => {
+    if (newPrice < 0) {
+      setPriceError("마이너스 값은 입력할 수 없습니다.");
+      return;
+    }
+
     try {
       const menuDoc = doc(fireStore, "costMenuItems", updatedMenu.id);
       await updateDoc(menuDoc, {
@@ -52,6 +60,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
         setUpdatedMenu(updatedDoc.data() as CostMenu);
       }
       setEditingPrice(false);
+      setPriceError(""); // 에러 메시지 초기화
     } catch (error) {
       console.error("Error updating price: ", error);
     }
@@ -59,6 +68,10 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
   // "판매 개수" firebase 데이터 수정
   const handleSaveQuantity = async () => {
+    if (newQuantity < 0) {
+      setQuantityError("마이너스 값은 입력할 수 없습니다.");
+      return;
+    }
     try {
       const menuDoc = doc(fireStore, "costMenuItems", updatedMenu.id); // 메뉴 문서 참조
       await updateDoc(menuDoc, {
@@ -71,6 +84,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       }
 
       setEditingQuantity(false); // 수정 모드 종료
+      setQuantityError(""); // 에러 메시지 초기화
     } catch (error) {
       console.error("Error updating quantity: ", error);
     }
@@ -78,6 +92,17 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
   // "재료" firebase 데이터 수정
   const handleSaveIngredients = async () => {
+    for (const ingredient of ingredients) {
+      if (
+        ingredient.purchasePrice < 0 ||
+        ingredient.purchaseQuantity < 0 ||
+        ingredient.usageQuantity < 0
+      ) {
+        setIngredientsError("마이너스 값은 입력할 수 없습니다.");
+        return; // 유효하지 않으면 저장하지 않음
+      }
+    }
+
     try {
       const menuDoc = doc(fireStore, "costMenuItems", menu.id);
       await updateDoc(menuDoc, {
@@ -91,6 +116,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
         setIngredients(updatedMenu.ingredients); // 상태 갱신
       }
       setEditingIngredients(false); // 수정 완료 후 모드 종료
+      setIngredientsError("");
     } catch (error) {
       console.error("Error updating ingredients: ", error);
     }
@@ -103,16 +129,16 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
     value: string | number
   ) => {
     const updatedIngredients = [...ingredients];
-  
+
     if (field === "name" && typeof value === "string") {
       updatedIngredients[index][field] = value; // 재료명은 string
     } else if (field !== "name" && typeof value === "number") {
       updatedIngredients[index][field] = value; // 나머지 필드는 number
     }
-  
+
     setIngredients(updatedIngredients);
   };
-  
+
   const handleAddRow = () => {
     setIngredients([
       ...ingredients,
@@ -153,9 +179,17 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 )}
               </div>
             </div>
+
             <div className="flex">
+              {priceError && (
+                <p className="text-red-500 text-sm ml-3">{priceError}</p>
+              )}
               <button
-                className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs"
+                className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
+                  editingPrice
+                    ? "bg-dark2 text-white border-dark2"
+                    : "bg-white  text-black border-gray-300"
+                }`}
                 onClick={editingPrice ? handleSavePrice : handleEditPrice}
               >
                 {editingPrice ? "완료" : "수정"}
@@ -186,8 +220,15 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
               </div>
             </div>
             <div className="flex">
+              {quantityError && (
+                <p className="text-red-500 text-sm ml-3">{quantityError}</p>
+              )}
               <button
-                className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs"
+                   className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
+                    editingQuantity
+                      ? "bg-dark2 text-white border-dark2"
+                      : "bg-white  text-black border-gray-300"
+                  }`}
                 onClick={
                   editingQuantity ? handleSaveQuantity : handleEditQuantity
                 }
@@ -343,8 +384,16 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             </div>
           )}
           <div className="flex">
-            <button
-              className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs mt-1"
+            {ingredientsError && (
+              <p className="text-red-500 text-sm ml-3">{ingredientsError}</p>
+            )}
+  
+              <button
+              className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
+                editingIngredients
+                 ? "bg-dark2 text-white border-dark2"
+                 : "bg-white  text-black border-gray-300"
+             }`}
               onClick={
                 editingIngredients
                   ? handleSaveIngredients
