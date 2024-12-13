@@ -1,11 +1,16 @@
-import { CostMenu } from "@/types/cost-menu";
+// import { CostMenu } from "@/types/cost-menu";
 import CostDetailClient from "./cost-detail-client";
-import { costMenuList } from "../../../../mock/cost-menu-list";
+// import { costMenuList } from "../../../../mock/cost-menu-list";
+import fetchCostMenuItemById from "@/utils/fetchCostMenuItemById";
 
-export default function Page({ params }: { params: { id: string } }) {
-  const menuId = params.id;
+type tParams = Promise<{ id: string }>;
 
-  const menu = costMenuList.find((menu: CostMenu) => menu.id === menuId);
+export default async function Page(props: { params: tParams }) {
+  const { id } = await props.params;
+
+
+    const menu = await fetchCostMenuItemById(id);
+
 
   if (!menu) {
     return <div>Menu not found</div>;
@@ -13,7 +18,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="p-4 text-xs">
-      <CostDetailClient key={menu.id} menu={menu} />
+      <CostDetailClient menu={menu} />
     </div>
   );
 }
