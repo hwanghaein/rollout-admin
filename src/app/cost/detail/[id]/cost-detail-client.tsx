@@ -103,16 +103,16 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
     value: string | number
   ) => {
     const updatedIngredients = [...ingredients];
-
-    if (typeof value === "string" && field === "name") {
-      updatedIngredients[index][field] = value;
-    } else if (typeof value === "number") {
-      updatedIngredients[index][field] = value;
+  
+    if (field === "name" && typeof value === "string") {
+      updatedIngredients[index][field] = value; // 재료명은 string
+    } else if (field !== "name" && typeof value === "number") {
+      updatedIngredients[index][field] = value; // 나머지 필드는 number
     }
-
+  
     setIngredients(updatedIngredients);
   };
-
+  
   const handleAddRow = () => {
     setIngredients([
       ...ingredients,
@@ -345,7 +345,11 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
           <div className="flex">
             <button
               className="ml-auto px-2 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs mt-1"
-              onClick={editingIngredients ? handleSaveIngredients : handleEditIngredients}
+              onClick={
+                editingIngredients
+                  ? handleSaveIngredients
+                  : handleEditIngredients
+              }
             >
               {editingIngredients ? "완료" : "수정"}
             </button>
