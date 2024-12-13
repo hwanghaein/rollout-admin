@@ -3,7 +3,9 @@ export interface Ingredient {
   purchasePrice: number; // 구매가 (원)
   purchaseQuantity: number; // 구매량 (g/ml)
   usageQuantity: number; // 사용량 (g/ml)
+  unit: 'g' | 'ml'; // 단위 (g 또는 ml)
 }
+
 
 export interface CostMenu {
   id: string; // 메뉴의 고유 ID

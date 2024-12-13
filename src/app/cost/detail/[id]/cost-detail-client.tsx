@@ -1,6 +1,30 @@
+"use client";
+
+import { useState } from "react";
 import { CostMenu } from "@/types/cost-menu";
 
 export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
+  const [editingIndex, setEditingIndex] = useState<number | null>(null); 
+  const [ingredients, setIngredients] = useState(menu.ingredients);
+  const [showAddButton, setShowAddButton] = useState(false); 
+
+  const handleAddRow = () => {
+    setIngredients([
+      ...ingredients,
+      {
+        name: "",
+        purchasePrice: 0,
+        purchaseQuantity: 0,
+        usageQuantity: 0,
+        unit: "g", 
+      },
+    ]);
+  };
+
+  const handleEditRow = () => {
+    setShowAddButton(true); 
+  };
+
   return (
     <div>
       <span className="text-dark2 text-xl mb-4">{menu.name}</span>
@@ -26,7 +50,6 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             </div>
           </div>
           <div>
-
             <div className="overflow-hidden border border-gray-300 mb-1">
               <div className="bg-gray-300 font-bold px-2 py-1 text-center">
                 판매 개수
@@ -50,8 +73,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
       <div className="mb-4">
         <div>
- 
-          <table className="min-w-full rounded-lg border border-gray-300 mb-1">
+          <table className="min-w-full rounded-lg border border-gray-300">
             <thead className="bg-gray-300">
               <tr>
                 <th className="px-1 py-1 border-r border-b text-center min-w-[90px]">
@@ -68,7 +90,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             </thead>
             {/* 재료 */}
             <tbody>
-              {menu.ingredients.map((ingredient, index) => (
+              {ingredients.map((ingredient, index) => (
                 <tr key={index}>
                   <td className="px-1 py-1 border-r border-b text-center">
                     {ingredient.name}
@@ -113,11 +135,27 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
               ))}
             </tbody>
           </table>
-          <div className="flex">
-              <button className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs">
-                수정
+          {showAddButton && (
+            <div className="">
+              <button
+                className="w-full px-2 py-1 text-md bg-[#e5e7eb] text-dark2 font-bold"
+                onClick={handleAddRow}
+              >
+                +
               </button>
             </div>
+          )}
+          <div className="flex">
+            <button
+              className="ml-auto px-1 py-1 cursor-pointer rounded-md bg-white border border-gray-300 text-black text-xs mt-1"
+              onClick={handleEditRow}
+            >
+              수정
+            </button>
+          </div>
+
+          {/* 회색 플러스 버튼 */}
+
         </div>
       </div>
 
