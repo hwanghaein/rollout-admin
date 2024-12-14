@@ -3,13 +3,22 @@
 import { useEffect, useState } from "react";
 import { CostMenu, Ingredient } from "@/types/cost-menu";
 import { doc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
-import fireStore from "../../../../../firebase/firestore"; 
-import { useRouter } from 'next/navigation';
-import { calculateTotalCost, calculateCostPerPiece, calculateMargin, calculateProfitPerPiece } from './../../../../utils/calculate'; 
+import fireStore from "../../../../../firebase/firestore";
+import { useRouter } from "next/navigation";
+import {
+  calculateTotalCost,
+  calculateCostPerPiece,
+  calculateMargin,
+  calculateProfitPerPiece,
+} from "./../../../../utils/calculate";
 
 export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
-
   const router = useRouter();
+
+  const [editingName, setEditingName] = useState(false); // "메뉴 이름" <수정중> 상태관리
+  const [newName, setNewName] = useState(menu.name); // 수정된 새로운 "메뉴 이름"
+  const [nameError, setNameError] = useState<string>(""); // "메뉴 이름" 에러 메시지 상태
+
   const [editingPrice, setEditingPrice] = useState(false); // "개당 판매가" <수정중> 상태관리
   const [newPrice, setNewPrice] = useState(menu.pricePerPiece); // 수정된 새로운 "개당 판매가"
   const [priceError, setPriceError] = useState<string>(""); // "개당 판매가" 에러 메시지 상태
@@ -25,24 +34,31 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
   const [updatedMenu, setUpdatedMenu] = useState(menu); // 업데이트된 메뉴 데이터 상태
   const [calculatedMenu, setCalculatedMenu] = useState<CostMenu>(menu);
 
-  useEffect(() => {
-    // ingredients 변경 시 계산된 값 업데이트
+  // 계산 결과
+  const recalculateMenu = () => {
     const totalCost = calculateTotalCost(ingredients);
     const costPerPiece = calculateCostPerPiece(totalCost, newQuantity);
     const margin = calculateMargin(newPrice, costPerPiece);
     const profitPerPiece = calculateProfitPerPiece(newPrice, costPerPiece);
-  
+
     setCalculatedMenu({
-      ...menu,
+      ...updatedMenu,
       ingredients,
       totalCost,
       costPerPiece,
       margin,
       profitPerPiece,
     });
-  }, [menu,ingredients]); 
-  
+  };
 
+  useEffect(() => {
+    recalculateMenu();
+  }, []);
+
+  // "메뉴 이름" 수정 토글 관리
+  const handleEditName = () => {
+    setEditingName(true);
+  };
 
   // "개당 판매가" 수정 토글 관리
   const handleEditPrice = () => {
@@ -57,7 +73,30 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
   // "재료" 수정 토글 관리
   const handleEditIngredients = () => {
     setEditingIngredients(!editingIngredients);
+  };
 
+  // "메뉴 이름" firebase 데이터 수정
+  const handleSaveName = async () => {
+    if (newName.trim() === "") {
+      setNameError("이름을 입력하세요.");
+      return;
+    }
+
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+      await updateDoc(menuDoc, { name: newName });
+
+      const updatedDoc = await getDoc(menuDoc);
+      if (updatedDoc.exists()) {
+        setUpdatedMenu(updatedDoc.data() as CostMenu);
+      }
+
+      setEditingName(false);
+      setNameError("");
+      alert("메뉴 이름이 저장되었습니다.");
+    } catch (error) {
+      console.error("Error updating name: ", error);
+    }
   };
 
   // "개당 판매가" firebase 데이터 수정
@@ -76,10 +115,12 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       const updatedDoc = await getDoc(menuDoc);
       if (updatedDoc.exists()) {
         setUpdatedMenu(updatedDoc.data() as CostMenu);
+        recalculateMenu();
       }
+
       setEditingPrice(false);
       setPriceError(""); // 에러 메시지 초기화
-      alert("개당 판매가가 저장되었습니다.")
+      alert("개당 판매가가 저장되었습니다.");
     } catch (error) {
       console.error("Error updating price: ", error);
     }
@@ -100,75 +141,91 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       const updatedDoc = await getDoc(menuDoc);
       if (updatedDoc.exists()) {
         setUpdatedMenu(updatedDoc.data() as CostMenu); // 업데이트된 데이터 반영
+        recalculateMenu();
       }
 
       setEditingQuantity(false); // 수정 모드 종료
       setQuantityError(""); // 에러 메시지 초기화
-      alert("판매 개수가 저장되었습니다.")
+      alert("판매 개수가 저장되었습니다.");
     } catch (error) {
       console.error("Error updating quantity: ", error);
     }
   };
 
   // "재료" firebase 데이터 수정
-const handleSaveIngredients = async () => {
-  for (const ingredient of ingredients) {
-    if (
-      ingredient.purchasePrice < 0 ||
-      ingredient.purchaseQuantity < 0 ||
-      ingredient.usageQuantity < 0
-    ) {
-      setIngredientsError("마이너스 값은 입력할 수 없습니다.");
-      return;
+  const handleSaveIngredients = async () => {
+    for (const ingredient of ingredients) {
+      if (
+        ingredient.purchasePrice < 0 ||
+        ingredient.purchaseQuantity < 0 ||
+        ingredient.usageQuantity < 0
+      ) {
+        setIngredientsError("마이너스 값은 입력할 수 없습니다.");
+        return;
+      }
     }
-  }
 
-  try {
-    const menuDoc = doc(fireStore, "costMenuItems", menu.id);
-    await updateDoc(menuDoc, {
-      ingredients: ingredients, // 수정된 재료 데이터 전체 반영
-    });
-
-    const updatedDoc = await getDoc(menuDoc);
-    if (updatedDoc.exists()) {
-      const updatedMenu = updatedDoc.data() as CostMenu;
-      setIngredients(updatedMenu.ingredients); // 상태 갱신
-      setCalculatedMenu({
-        ...updatedMenu,
-        totalCost: calculateTotalCost(updatedMenu.ingredients),
-        costPerPiece: calculateCostPerPiece(calculateTotalCost(updatedMenu.ingredients), updatedMenu.salesQuantity),
-        margin: calculateMargin(updatedMenu.pricePerPiece, calculateCostPerPiece(calculateTotalCost(updatedMenu.ingredients), updatedMenu.salesQuantity)),
-        profitPerPiece: calculateProfitPerPiece(updatedMenu.pricePerPiece, calculateCostPerPiece(calculateTotalCost(updatedMenu.ingredients), updatedMenu.salesQuantity)),
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+      await updateDoc(menuDoc, {
+        ingredients: ingredients, // 수정된 재료 데이터 전체 반영
       });
+
+      const updatedDoc = await getDoc(menuDoc);
+      if (updatedDoc.exists()) {
+        const updatedMenu = updatedDoc.data() as CostMenu;
+        setIngredients(updatedMenu.ingredients); // 상태 갱신
+        recalculateMenu();
+        setCalculatedMenu({
+          ...updatedMenu,
+          totalCost: calculateTotalCost(updatedMenu.ingredients),
+          costPerPiece: calculateCostPerPiece(
+            calculateTotalCost(updatedMenu.ingredients),
+            updatedMenu.salesQuantity
+          ),
+          margin: calculateMargin(
+            updatedMenu.pricePerPiece,
+            calculateCostPerPiece(
+              calculateTotalCost(updatedMenu.ingredients),
+              updatedMenu.salesQuantity
+            )
+          ),
+          profitPerPiece: calculateProfitPerPiece(
+            updatedMenu.pricePerPiece,
+            calculateCostPerPiece(
+              calculateTotalCost(updatedMenu.ingredients),
+              updatedMenu.salesQuantity
+            )
+          ),
+        });
+      }
+      setEditingIngredients(false); // 수정 완료 후 모드 종료
+      setIngredientsError("");
+      alert("재료 정보가 저장되었습니다.");
+    } catch (error) {
+      console.error("Error updating ingredients: ", error);
     }
-    setEditingIngredients(false); // 수정 완료 후 모드 종료
-    setIngredientsError("");
-    alert("재료 정보가 저장되었습니다.")
-  } catch (error) {
-    console.error("Error updating ingredients: ", error);
-  }
-};
+  };
 
+  // "재료" firebase 데이터 삭제
+  const handleDeleteIngredient = async (index: number) => {
+    const ingredientName = ingredients[index].name;
+    if (!window.confirm(`${ingredientName} 재료를 정말 삭제하시겠습니까?`))
+      return;
 
-// "재료" firebase 데이터 삭제
-const handleDeleteIngredient = async (index: number) => {
-  const ingredientName = ingredients[index].name;
-  if (!window.confirm(`${ingredientName} 재료를 정말 삭제하시겠습니까?`)) return;
+    const updatedIngredients = ingredients.filter((_, i) => i !== index);
+    setIngredients(updatedIngredients);
 
-  const updatedIngredients = ingredients.filter((_, i) => i !== index);
-  setIngredients(updatedIngredients);
-
-  try {
-    const menuDoc = doc(fireStore, "costMenuItems", menu.id);
-    await updateDoc(menuDoc, { ingredients: updatedIngredients });
-    alert(`${ingredientName}가 삭제되었습니다.`);
-  } catch (error) {
-    console.error("Error deleting ingredient: ", error);
-    alert("재료 삭제 중 오류가 발생했습니다.");
-  }
-};
-
-
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+      await updateDoc(menuDoc, { ingredients: updatedIngredients });
+      alert(`${ingredientName}가 삭제되었습니다.`);
+      recalculateMenu();
+    } catch (error) {
+      console.error("Error deleting ingredient: ", error);
+      alert("재료 삭제 중 오류가 발생했습니다.");
+    }
+  };
 
   // 재료명, 구매가, 구매량, 사용량을 수정하는 함수
   const handleIngredientChange = (
@@ -197,29 +254,57 @@ const handleDeleteIngredient = async (index: number) => {
         usageQuantity: 0,
       },
     ]);
+    recalculateMenu();
   };
 
-// "메뉴 전체"를 firebase 데이터 삭제
-const handleDeleteMenu = async () => {
-  if (window.confirm("해당 메뉴를 정말 삭제하시겠습니까?")) {
-    try {
-      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
-      await deleteDoc(menuDoc); // Firebase에서 메뉴 삭제
-      alert("메뉴가 삭제되었습니다.");
-      router.push('/cost');
-    } catch (error) {
-      console.error("Error deleting menu: ", error);
-      alert("메뉴 삭제 중 오류가 발생했습니다.");
+  // "메뉴 전체"를 firebase 데이터 삭제
+  const handleDeleteMenu = async () => {
+    if (window.confirm("해당 메뉴를 정말 삭제하시겠습니까?")) {
+      try {
+        const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+        await deleteDoc(menuDoc); // Firebase에서 메뉴 삭제
+        alert("메뉴가 삭제되었습니다.");
+        router.push("/cost");
+      } catch (error) {
+        console.error("Error deleting menu: ", error);
+        alert("메뉴 삭제 중 오류가 발생했습니다.");
+      }
+    } else {
+      console.log("삭제가 취소되었습니다.");
     }
-  } else {
-    console.log("삭제가 취소되었습니다.");
-  }
-};
- 
+  };
 
   return (
     <div className="md:max-w-[1100px] md:mx-auto">
-      <span className="text-dark2 text-xl mb-4">{menu.name}</span>
+      <span className="text-dark2 text-xl mb-4">
+        {editingName ? (
+          <div className="flex items-center">
+            <input
+              type="text"
+              className="min-w-[295px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+              placeholder={String(newName)}
+              onChange={(e) => setNewName(e.target.value)}
+            />
+            <button
+              onClick={handleSaveName}
+              className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
+            >
+              저장
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center">
+            {menu.name}
+            <button
+              onClick={handleEditName}
+              className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+            >
+              수정
+            </button>
+          </div>
+        )}
+      </span>
+      {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4 ">
           <div>
@@ -232,8 +317,8 @@ const handleDeleteMenu = async () => {
                   <div className="text-center">
                     <input
                       type="number"
-                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 min-w-[90px]"
-                      value={newPrice}
+                      className="w-[50px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                      placeholder={String(newPrice)}
                       onChange={(e) => setNewPrice(Number(e.target.value))}
                     />
                     <span className="ml-1">원</span>
@@ -253,7 +338,7 @@ const handleDeleteMenu = async () => {
               <button
                 className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                   editingPrice
-                    ? "bg-dark2 text-white border-dark2"
+                    ? "bg-blue-500 text-white border-blue-500"
                     : "bg-white  text-black border-gray-300"
                 }`}
                 onClick={editingPrice ? handleSavePrice : handleEditPrice}
@@ -272,8 +357,8 @@ const handleDeleteMenu = async () => {
                   <div className="text-center">
                     <input
                       type="number"
-                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 "
-                      value={newQuantity}
+                      className="w-[50px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 "
+                      placeholder={String(newQuantity)}
                       onChange={(e) => setNewQuantity(Number(e.target.value))}
                     />
                     <span className="ml-1">개</span>
@@ -290,11 +375,11 @@ const handleDeleteMenu = async () => {
                 <p className="text-red-500 text-sm ml-3">{quantityError}</p>
               )}
               <button
-                   className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
-                    editingQuantity
-                      ? "bg-dark2 text-white border-dark2"
-                      : "bg-white  text-black border-gray-300"
-                  }`}
+                className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
+                  editingQuantity
+                    ? "bg-blue-500 text-white border-blue-500"
+                    : "bg-white  text-black border-gray-300"
+                }`}
                 onClick={
                   editingQuantity ? handleSaveQuantity : handleEditQuantity
                 }
@@ -346,15 +431,24 @@ const handleDeleteMenu = async () => {
                   >
                     {editingIngredients ? (
                       <div className="flex items-center">
-                      <input // 재료명
-                        type="text"
-                        className="w-[88px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
-                        placeholder={String(ingredient.name)}
-                        onChange={(e) =>
-                          handleIngredientChange(index, "name", e.target.value)
-                        }
-                      /> 
-                      <button onClick={() => handleDeleteIngredient(index)} className="px-1 items-center bg-gray-100 border-y border-r border-gray-300 text-gray-700">X</button>
+                        <input // 재료명
+                          type="text"
+                          className="w-[88px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                          placeholder={String(ingredient.name)}
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              index,
+                              "name",
+                              e.target.value
+                            )
+                          }
+                        />
+                        <button
+                          onClick={() => handleDeleteIngredient(index)}
+                          className="px-1 items-center bg-gray-100 border-y border-r border-gray-300 text-gray-700"
+                        >
+                          X
+                        </button>
                       </div>
                     ) : (
                       <div>{ingredient.name || "-"}</div>
@@ -456,13 +550,13 @@ const handleDeleteMenu = async () => {
             {ingredientsError && (
               <p className="text-red-500 text-sm ml-3">{ingredientsError}</p>
             )}
-  
-              <button
+
+            <button
               className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                 editingIngredients
-                 ? "bg-dark2 text-white border-dark2"
-                 : "bg-white  text-black border-gray-300"
-             }`}
+                  ? "bg-blue-500 text-white border-blue-500"
+                  : "bg-white  text-black border-gray-300"
+              }`}
               onClick={
                 editingIngredients
                   ? handleSaveIngredients
@@ -474,8 +568,8 @@ const handleDeleteMenu = async () => {
           </div>
         </div>
       </div>
-{/* 계산 결과  */}
-      <div className="mb-6">
+      {/* 계산 결과  */}
+      <div className="mb-8">
         <table className="min-w-full rounded-lg border border-gray-300">
           <thead className="bg-gray-300">
             <tr>
@@ -489,7 +583,7 @@ const handleDeleteMenu = async () => {
                 총 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.totalCost.toFixed(2)} 원
+                {calculatedMenu.totalCost.toFixed(2)}원
               </td>
             </tr>
             <tr>
@@ -497,7 +591,7 @@ const handleDeleteMenu = async () => {
                 개당 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.costPerPiece.toFixed(2)} 원
+                {calculatedMenu.costPerPiece.toFixed(2)}원
               </td>
             </tr>
             <tr>
@@ -505,7 +599,7 @@ const handleDeleteMenu = async () => {
                 마진율
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.margin.toFixed(2)} %
+                {calculatedMenu.margin.toFixed(2)}%
               </td>
             </tr>
             <tr>
@@ -513,15 +607,18 @@ const handleDeleteMenu = async () => {
                 개당 수익
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.profitPerPiece.toFixed(2)} 원
+                {calculatedMenu.profitPerPiece.toFixed(2)}원
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div className="flex">
-        <button onClick={handleDeleteMenu} className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs">
-          {menu.name} 삭제하기
+        <button
+          onClick={handleDeleteMenu}
+          className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs"
+        >
+          메뉴 삭제하기
         </button>
       </div>
     </div>
