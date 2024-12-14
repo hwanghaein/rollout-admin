@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { CostMenu, Ingredient } from "@/types/cost-menu";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
 import fireStore from "../../../../../firebase/firestore"; 
+import { useRouter } from 'next/navigation';
 import { calculateTotalCost, calculateCostPerPiece, calculateMargin, calculateProfitPerPiece } from './../../../../utils/calculate'; 
 
 export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
+  const router = useRouter();
   const [editingPrice, setEditingPrice] = useState(false); // "개당 판매가" <수정중> 상태관리
   const [newPrice, setNewPrice] = useState(menu.pricePerPiece); // 수정된 새로운 "개당 판매가"
   const [priceError, setPriceError] = useState<string>(""); // "개당 판매가" 에러 메시지 상태
@@ -38,7 +40,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       margin,
       profitPerPiece,
     });
-  }, [ingredients]); 
+  }, [menu,ingredients]); 
   
 
 
@@ -77,7 +79,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       }
       setEditingPrice(false);
       setPriceError(""); // 에러 메시지 초기화
-      alert("저장되었습니다.")
+      alert("개당 판매가가 저장되었습니다.")
     } catch (error) {
       console.error("Error updating price: ", error);
     }
@@ -102,7 +104,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
       setEditingQuantity(false); // 수정 모드 종료
       setQuantityError(""); // 에러 메시지 초기화
-      alert("저장되었습니다.")
+      alert("판매 개수가 저장되었습니다.")
     } catch (error) {
       console.error("Error updating quantity: ", error);
     }
@@ -141,11 +143,32 @@ const handleSaveIngredients = async () => {
     }
     setEditingIngredients(false); // 수정 완료 후 모드 종료
     setIngredientsError("");
-    // alert("저장되었습니다.")
+    alert("재료 정보가 저장되었습니다.")
   } catch (error) {
     console.error("Error updating ingredients: ", error);
   }
 };
+
+
+// "재료" firebase 데이터 삭제
+const handleDeleteIngredient = async (index: number) => {
+  const ingredientName = ingredients[index].name;
+  if (!window.confirm(`${ingredientName} 재료를 정말 삭제하시겠습니까?`)) return;
+
+  const updatedIngredients = ingredients.filter((_, i) => i !== index);
+  setIngredients(updatedIngredients);
+
+  try {
+    const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+    await updateDoc(menuDoc, { ingredients: updatedIngredients });
+    alert(`${ingredientName}가 삭제되었습니다.`);
+  } catch (error) {
+    console.error("Error deleting ingredient: ", error);
+    alert("재료 삭제 중 오류가 발생했습니다.");
+  }
+};
+
+
 
   // 재료명, 구매가, 구매량, 사용량을 수정하는 함수
   const handleIngredientChange = (
@@ -176,13 +199,22 @@ const handleSaveIngredients = async () => {
     ]);
   };
 
-  const handleDeleteMenu = () => {
-    if (window.confirm("해당 메뉴를 정말 삭제하시겠습니까?")) {
-      alert("삭제되었습니다.");
-    } else {
-      console.log("삭제가 취소되었습니다.");
+// "메뉴 전체"를 firebase 데이터 삭제
+const handleDeleteMenu = async () => {
+  if (window.confirm("해당 메뉴를 정말 삭제하시겠습니까?")) {
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+      await deleteDoc(menuDoc); // Firebase에서 메뉴 삭제
+      alert("메뉴가 삭제되었습니다.");
+      router.push('/cost');
+    } catch (error) {
+      console.error("Error deleting menu: ", error);
+      alert("메뉴 삭제 중 오류가 발생했습니다.");
     }
-  };
+  } else {
+    console.log("삭제가 취소되었습니다.");
+  }
+};
  
 
   return (
@@ -322,7 +354,7 @@ const handleSaveIngredients = async () => {
                           handleIngredientChange(index, "name", e.target.value)
                         }
                       /> 
-                      <button className="px-1 items-center bg-gray-100 border-y border-r border-gray-300 text-gray-700">X</button>
+                      <button onClick={() => handleDeleteIngredient(index)} className="px-1 items-center bg-gray-100 border-y border-r border-gray-300 text-gray-700">X</button>
                       </div>
                     ) : (
                       <div>{ingredient.name || "-"}</div>
