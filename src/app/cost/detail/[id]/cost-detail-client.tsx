@@ -173,11 +173,20 @@ const handleSaveIngredients = async () => {
     ]);
   };
 
+  const handleDeleteMenu = () => {
+    if (window.confirm("해당 메뉴를 정말 삭제하시겠습니까?")) {
+      alert("삭제되었습니다.");
+    } else {
+      console.log("삭제가 취소되었습니다.");
+    }
+  };
+ 
+
   return (
-    <div>
+    <div className="md:max-w-[1100px] md:mx-auto">
       <span className="text-dark2 text-xl mb-4">{menu.name}</span>
       <div className="mb-4 mt-5">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 ">
           <div>
             <div className="overflow-hidden border border-gray-300 min-h-[52px]">
               <div className="bg-gray-300 font-bold text-center px-2 py-1">
@@ -188,7 +197,7 @@ const handleSaveIngredients = async () => {
                   <div className="text-center">
                     <input
                       type="number"
-                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 min-w-[90px]"
                       value={newPrice}
                       onChange={(e) => setNewPrice(Number(e.target.value))}
                     />
@@ -214,7 +223,7 @@ const handleSaveIngredients = async () => {
                 }`}
                 onClick={editingPrice ? handleSavePrice : handleEditPrice}
               >
-                {editingPrice ? "완료" : "수정"}
+                {editingPrice ? "저장" : "수정"}
               </button>
             </div>
           </div>
@@ -228,7 +237,7 @@ const handleSaveIngredients = async () => {
                   <div className="text-center">
                     <input
                       type="number"
-                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                      className="w-[40px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 "
                       value={newQuantity}
                       onChange={(e) => setNewQuantity(Number(e.target.value))}
                     />
@@ -255,7 +264,7 @@ const handleSaveIngredients = async () => {
                   editingQuantity ? handleSaveQuantity : handleEditQuantity
                 }
               >
-                {editingQuantity ? "완료" : "수정"}
+                {editingQuantity ? "저장" : "수정"}
               </button>
             </div>
           </div>
@@ -422,7 +431,7 @@ const handleSaveIngredients = async () => {
                   : handleEditIngredients
               }
             >
-              {editingIngredients ? "완료" : "수정"}
+              {editingIngredients ? "저장" : "수정"}
             </button>
           </div>
         </div>
@@ -473,7 +482,7 @@ const handleSaveIngredients = async () => {
         </table>
       </div>
       <div className="flex">
-        <button className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs">
+        <button onClick={handleDeleteMenu} className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs">
           메뉴 삭제
         </button>
       </div>
