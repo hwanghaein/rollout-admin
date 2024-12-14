@@ -118,7 +118,7 @@ export default function CostClient({ costMenuList }: CostClientProps) {
 
   return (
     <>
-      <div className="flex mb-1">
+      <div className="flex mb-3">
         {/* 검색창 */}
         <div className="mb-2 flex items-center">
           <input
@@ -126,15 +126,15 @@ export default function CostClient({ costMenuList }: CostClientProps) {
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="메뉴 이름 검색"
-            className="w-full px-2 py-1 border border-gray-300 rounded text-sm "
+            className="w-full px-3 py-2 border border-gray-300 rounded text-sm "
           />
-          <FaSearch className=" text-gray-500 text-2xl ml-1" />
+          <FaSearch className=" text-gray-500 text-3xl ml-2" />
         </div>
 
         {/* 메뉴 추가 버튼 */}
         <div className=" ml-auto">
           <button
-            className="px-2 py-1 cursor-pointer bg-blue-500 text-white rounded text-sm border border-blue-500"
+            className="px-3 py-2 cursor-pointer bg-blue-500 text-white rounded text-sm border border-blue-500"
             onClick={() => setIsModalOpen(true)}
           >
             메뉴 추가
