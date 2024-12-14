@@ -287,7 +287,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             />
             <button
               onClick={handleSaveName}
-              className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
+              className="px-3 py-2 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
             >
               저장
             </button>
@@ -297,7 +297,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
             {menu.name}
             <button
               onClick={handleEditName}
-              className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+              className="px-3 py-2 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
             >
               수정
             </button>
@@ -583,7 +583,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 총 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.totalCost.toFixed(2)}원
+                {calculatedMenu.totalCost.toFixed(0)}원
               </td>
             </tr>
             <tr>
@@ -591,7 +591,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 개당 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.costPerPiece.toFixed(2)}원
+                {calculatedMenu.costPerPiece.toFixed(0)}원
               </td>
             </tr>
             <tr>
@@ -607,7 +607,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 개당 수익
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.profitPerPiece.toFixed(2)}원
+                {calculatedMenu.profitPerPiece.toFixed(0)}원
               </td>
             </tr>
           </tbody>

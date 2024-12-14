@@ -204,7 +204,7 @@ export default function CostClient({ costMenuList }: CostClientProps) {
                 <td className="px-3 py-2 border-x border-gray-200">
                   {item.totalCost === 0
                     ? "0원"
-                    : `${item.totalCost.toFixed(2)}원`}
+                    : `${item.totalCost.toFixed(0)}원`}
                 </td>
                 <td className="px-3 py-2 border-x border-gray-200">
                   {item.pricePerPiece}원
