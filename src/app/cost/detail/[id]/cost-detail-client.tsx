@@ -77,6 +77,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       }
       setEditingPrice(false);
       setPriceError(""); // 에러 메시지 초기화
+      alert("저장되었습니다.")
     } catch (error) {
       console.error("Error updating price: ", error);
     }
@@ -101,6 +102,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
       setEditingQuantity(false); // 수정 모드 종료
       setQuantityError(""); // 에러 메시지 초기화
+      alert("저장되었습니다.")
     } catch (error) {
       console.error("Error updating quantity: ", error);
     }
@@ -139,6 +141,7 @@ const handleSaveIngredients = async () => {
     }
     setEditingIngredients(false); // 수정 완료 후 모드 종료
     setIngredientsError("");
+    // alert("저장되었습니다.")
   } catch (error) {
     console.error("Error updating ingredients: ", error);
   }
@@ -310,14 +313,17 @@ const handleSaveIngredients = async () => {
                     style={{ minWidth: "90px" }}
                   >
                     {editingIngredients ? (
+                      <div className="flex items-center">
                       <input // 재료명
                         type="text"
-                        className="w-[105px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                        className="w-[88px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
                         placeholder={String(ingredient.name)}
                         onChange={(e) =>
                           handleIngredientChange(index, "name", e.target.value)
                         }
-                      />
+                      /> 
+                      <button className="px-1 items-center bg-gray-100 border-y border-r border-gray-300 text-gray-700">X</button>
+                      </div>
                     ) : (
                       <div>{ingredient.name || "-"}</div>
                     )}
@@ -483,7 +489,7 @@ const handleSaveIngredients = async () => {
       </div>
       <div className="flex">
         <button onClick={handleDeleteMenu} className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs">
-          메뉴 삭제
+          {menu.name} 삭제하기
         </button>
       </div>
     </div>
