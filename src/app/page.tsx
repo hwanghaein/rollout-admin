@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col bg-gray-50 min-h-screen p-6">
+    <div className="flex flex-col min-h-screen p-6 max-w-[1100px] mx-auto">
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {/* 매장 관리 */}
         <div className="col-span-2 p-4 bg-gray-300 text-dark2 text-center rounded-lg">
