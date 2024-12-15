@@ -59,7 +59,7 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
   }, []);
 
   const handleClick = (id: string) => {
-    router.push(`/cost/detail/${id}`);
+    router.push(`/cost/ingredient-detail/${id}`);
   };
 
   // 재료 이름 입력 변경
@@ -193,7 +193,7 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
         </table>
       </div>
       <div className="mt-5 text-sm text-gray-600">
-        총 {filteredIngredients.length}개의 재료가 등록돼 있습니다.
+        총 {filteredIngredients.length}개의 재료가 등록돼있습니다.
       </div>
     </>
   );
