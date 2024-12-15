@@ -1,6 +1,4 @@
-// import { CostMenu } from "@/types/cost-menu";
-import CostDetailClient from "./cost-detail-client";
-// import { costMenuList } from "../../../../mock/cost-menu-list";
+import CostDetailComponent from "./cost-detail-component";
 import fetchCostMenuItemById from "@/utils/fetchCostMenuItemById";
 
 type tParams = Promise<{ id: string }>;
@@ -18,7 +16,7 @@ export default async function Page(props: { params: tParams }) {
 
   return (
     <div className="p-4 text-xs">
-      <CostDetailClient menu={menu} />
+      <CostDetailComponent menu={menu} />
     </div>
   );
 }
