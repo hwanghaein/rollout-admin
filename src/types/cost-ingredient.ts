@@ -13,6 +13,11 @@ export interface CostIngredient {
   salesQuantity: number; // 판매 개수 (개)
 
   ingredients: Ingredients[]; // 재료 정보 배열
-
+  totalCost?: number; // 총 원가 (원)
   costPerPiece: number; // 개당 원가 (원)
 }
+
+
+// 개당판매가 pricePerPiece
+// 마진률 margin
+// 개당 수익 profitPerPiece
