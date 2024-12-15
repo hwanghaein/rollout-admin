@@ -595,7 +595,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 총 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.totalCost.toFixed(0)}원
+                {Number(calculatedMenu.totalCost).toFixed(0)}원
               </td>
             </tr>
             <tr>
@@ -603,7 +603,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 개당 원가
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.costPerPiece.toFixed(0)}원
+                {Number(calculatedMenu.costPerPiece).toFixed(0)}원
               </td>
             </tr>
             <tr>
@@ -611,7 +611,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 마진율
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.margin.toFixed(2)}%
+                {Number(calculatedMenu.margin).toFixed(2)}%
               </td>
             </tr>
             <tr>
@@ -619,7 +619,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 개당 수익
               </td>
               <td className="px-2 py-1 border-b text-center">
-                {calculatedMenu.profitPerPiece.toFixed(0)}원
+                {Number(calculatedMenu.profitPerPiece).toFixed(0)}원
               </td>
             </tr>
           </tbody>

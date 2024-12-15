@@ -204,13 +204,13 @@ export default function CostClient({ costMenuList }: CostClientProps) {
                 <td className="px-3 py-2 border-x border-gray-200">
                   {item.totalCost === 0
                     ? "0원"
-                    : `${item.totalCost.toFixed(0)}원`}
+                    : `${Number(item.totalCost).toFixed(0)}원`}
                 </td>
                 <td className="px-3 py-2 border-x border-gray-200">
-                  {item.pricePerPiece}원
+                  {Number(item.pricePerPiece).toFixed(0)}원
                 </td>
                 <td className="px-3 py-2 border-x border-gray-200">
-                  {item.margin === 0 ? "0%" : `${item.margin.toFixed(2)}%`}
+                  {item.margin === 0 ? "0%" : `${Number(item.margin).toFixed(2)}%`}
                 </td>
               </tr>
             ))}
