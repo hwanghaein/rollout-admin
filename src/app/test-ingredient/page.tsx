@@ -6,21 +6,16 @@ import fireStore from '../../../firebase/firestore';
 export default function Page() {
   const onClickCreate = async () => {
     try {
-      const userDocRef = doc(fireStore, "costMenuItems", '31');
+      const userDocRef = doc(fireStore, "costIngredients", '5');
       await setDoc(userDocRef,  
         {
-          id: "31",
-          name: "초코 레어 치즈 케이크", 
-          pricePerPiece: 0, 
-          salesQuantity: 0,
-          ingredients: [
-            { name: "Milk", purchasePrice: 0, purchaseQuantity: 0, usageQuantity: 0 },
-            { name: "Vanilla Syrup", purchasePrice: 0, purchaseQuantity: 0, usageQuantity: 0 },
+          id: "5",
+          name: "재료5", // 재료 이름
+          salesQuantity: 10, // 판매 개수 (개)
+          ingredients: [ // 재료 정보 배열
+            { name: "재료", purchasePrice: 6500, purchaseQuantity: 1000, usageQuantity: 500 }, // 구매가, 구매량, 사용량
           ],
-          totalCost: 0,
-          costPerPiece: 0,
-          margin: 0,
-          profitPerPiece: 0,
+          costPerPiece: 0, // 개당 원가 (원)
         },
     );
       console.log("데이터가 성공적으로 추가되었습니다.");
