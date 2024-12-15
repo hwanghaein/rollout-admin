@@ -20,16 +20,19 @@ export const calculateCostPerPiece = (totalCost: number, quantity: number): numb
   return totalCost / quantity;
 };
 
-// 마진율
-export const calculateMargin = (sellingPrice: number, costPerPiece: number): number => {
-  // 개당 원가가 0일 경우, 마진율 0% 반환
-  if (costPerPiece === 0) return 0;
-  return ((sellingPrice - costPerPiece) / costPerPiece) * 100;
-};
-
 // 개당 수익
 export const calculateProfitPerPiece = (sellingPrice: number, costPerPiece: number): number => {
-  // 개당 원가가 0일 경우, 수익 0 반환
-  if (costPerPiece === 0) return sellingPrice; // 원가가 0이면 전액이 수익
-  return sellingPrice - costPerPiece;
+  // 판매가의 10%를 공제한 개당 수익 계산
+  const sellingPriceAfterFee = sellingPrice * 0.9;
+  return sellingPriceAfterFee - costPerPiece;
+};
+
+// 마진율
+export const calculateMargin = (sellingPrice: number, costPerPiece: number): number => {
+  const profitPerPiece = calculateProfitPerPiece(sellingPrice, costPerPiece);
+
+  // 개당 원가가 0일 경우, 마진율 0% 반환
+  if (costPerPiece === 0) return 0;
+
+  return (profitPerPiece / costPerPiece) * 100;
 };
