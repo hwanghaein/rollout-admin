@@ -253,14 +253,14 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
               {menu.name}
               <button
                 onClick={handleEditName}
-                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
               >
                 수정
               </button>
             </div>
           )}
         </div>
-        <button onClick={handleGoCost} className="px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300">
+        <button onClick={handleGoCost} className=" hover:bg-blue-500 hover:text-white hover:border-blue-500  px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300">
           목록으로 돌아가기
         </button>
       </div>
@@ -300,7 +300,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                 className={`ml-2 px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                   editingQuantity
                     ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white  text-black border-gray-300"
+                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
                 }`}
                 onClick={
                   editingQuantity ? handleSaveQuantity : handleEditQuantity
@@ -477,7 +477,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
               className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                 editingIngredients
                   ? "bg-blue-500 text-white border-blue-500"
-                  : "bg-white  text-black border-gray-300"
+                  : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
               }`}
               onClick={
                 editingIngredients
