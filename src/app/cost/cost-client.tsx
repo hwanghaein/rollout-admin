@@ -177,16 +177,16 @@ export default function CostClient({ costMenuList }: CostClientProps) {
         <table className="min-w-full text-sm text-left text-dark2">
           <thead className="bg-gray-300">
             <tr>
-              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className=" min-w-[95px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
                 메뉴명
               </th>
-              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
                 총 원가
               </th>
-              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
                 판매가
               </th>
-              <th className="px-3 py-2 font-bold text-dark2 border-x border-gray-200">
+              <th className=" px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
                 마진율
               </th>
             </tr>
