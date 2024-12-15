@@ -14,11 +14,11 @@ import {
 } from "./../../utils/calculate";
 import { FaSearch } from "react-icons/fa";
 
-interface CostClientProps {
+interface CostMenuProps {
   costMenuList: CostMenu[];
 }
 
-export default function CostClient({ costMenuList }: CostClientProps) {
+export default function CostClient({ costMenuList }: CostMenuProps) {
   const router = useRouter();
   const [newMenuName, setNewMenuName] = useState(""); // 사용자 입력 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
@@ -99,9 +99,9 @@ export default function CostClient({ costMenuList }: CostClientProps) {
 
       await setDoc(userDocRef, newMenu);
 
-      router.push("/cost");
       setIsModalOpen(false);
       alert(`${newMenuName} 메뉴가 추가되었습니다.`);
+      router.push("/cost");
       setNewMenuName("");
     }
   };
