@@ -11,8 +11,16 @@ import {
   calculateMargin,
   calculateProfitPerPiece,
 } from "../../../../utils/calculate";
+import SearchModal from "@/components/search-modal";
+import { CostIngredient } from "@/types/cost-ingredient";
 
-export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
+export default function CostMenuDetail({
+  menu,
+  costIngredients,
+}: {
+  menu: CostMenu;
+  costIngredients: CostIngredient[];
+}) {
   const router = useRouter();
 
   const [editingName, setEditingName] = useState(false); // "메뉴 이름" <수정중> 상태관리
@@ -29,10 +37,22 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
 
   const [editingIngredients, setEditingIngredients] = useState(false); // "재료 관련 표" <수정중> 상태관리
   const [ingredients, setIngredients] = useState(menu.ingredients);
-  const [ingredientsError, setIngredientsError] = useState<string>(""); 
+  const [ingredientsError, setIngredientsError] = useState<string>("");
 
   const [updatedMenu, setUpdatedMenu] = useState(menu); // 업데이트된 메뉴 데이터 상태
   const [calculatedMenu, setCalculatedMenu] = useState<CostMenu>(menu);
+
+  const [selectedNames, setSelectedNames] = useState<string[]>([]); // 모달창에서 선택된 재료 이름들
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // 모달 열기
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    
+  
 
   // 계산 결과
   const recalculateMenu = () => {
@@ -73,6 +93,25 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
   // "재료" 수정 토글 관리
   const handleEditIngredients = () => {
     setEditingIngredients(!editingIngredients);
+  };
+
+  // 모달 닫기 및 배열 저장
+  const handleSaveAddedIngredients = async () => {
+
+    try {
+      const menuDoc = doc(fireStore, "costMenuItems", menu.id);
+      await updateDoc(menuDoc, { addedIngredients: selectedNames });
+
+      const updatedDoc = await getDoc(menuDoc);
+      if (updatedDoc.exists()) {
+        setUpdatedMenu(updatedDoc.data() as CostMenu);
+      }
+
+      setIsModalOpen(false);
+      alert("재료가 저장되었습니다.");
+    } catch (error) {
+      console.error("Error updating name: ", error);
+    }
   };
 
   // "메뉴 이름" firebase 데이터 수정
@@ -274,11 +313,23 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
     }
   };
 
+  // 추가된 재료의 원가 개산
+  const getCostPerPiece = (ingredientName: string): number => {
+    const selectedIngredient = costIngredients.find(
+      (ingredient) => ingredient.name === ingredientName
+    );
+
+    if (selectedIngredient) {
+      const totalCost = calculateTotalCost(selectedIngredient.ingredients); // 총 원가 계산
+      return calculateCostPerPiece(totalCost, selectedIngredient.salesQuantity); // 개당 원가 계산
+    }
+    return 0;
+  };
+
   const handleGoCost = () => {
     router.push(`/cost`);
   };
-
-
+  console.log(selectedNames);
 
   // 마크업 부분
   return (
@@ -286,7 +337,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
       <div className="flex items-center justify-between mb-8">
         <div className="text-dark2 text-xl">
           {editingName ? (
-            <div className="flex items-center"> 
+            <div className="flex items-center">
               <input
                 type="text"
                 className="w-40 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
@@ -305,14 +356,17 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
               {menu.name}
               <button
                 onClick={handleEditName}
-                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
               >
                 수정
               </button>
             </div>
           )}
         </div>
-        <button onClick={handleGoCost} className="px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300">
+        <button
+          onClick={handleGoCost}
+          className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+        >
           목록으로 돌아가기
         </button>
       </div>
@@ -351,7 +405,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                   editingPrice
                     ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white  text-black border-gray-300"
+                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
                 }`}
                 onClick={editingPrice ? handleSavePrice : handleEditPrice}
               >
@@ -390,7 +444,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
                 className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                   editingQuantity
                     ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white  text-black border-gray-300"
+                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
                 }`}
                 onClick={
                   editingQuantity ? handleSaveQuantity : handleEditQuantity
@@ -567,7 +621,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
               className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                 editingIngredients
                   ? "bg-blue-500 text-white border-blue-500"
-                  : "bg-white  text-black border-gray-300"
+                  : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
               }`}
               onClick={
                 editingIngredients
@@ -581,7 +635,7 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
         </div>
       </div>
       {/* 계산 결과  */}
-      <div className="mb-8">
+      <div className="mb-12">
         <table className="min-w-full rounded-lg border border-gray-300">
           <thead className="bg-gray-300">
             <tr>
@@ -625,10 +679,127 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
           </tbody>
         </table>
       </div>
+
+      {/* / 재료추가 */}
+      <button onClick={openModal} className="mb-7 px-2 py-1 cursor-pointer rounded-md text-xs border  bg-blue-500 text-white border-blue-500">
+        재료 추가하기
+      </button>
+
+      {isModalOpen && (
+        <SearchModal
+          costIngredients={costIngredients}
+          selectedNames={selectedNames}
+          setSelectedNames={setSelectedNames}
+          handleSaveAddedIngredients={handleSaveAddedIngredients} 
+        />
+      )}
+
+      <div className="text-xs font-bold mb-4">
+        추가된 재료들의 총 개당 원가:{" "}
+        {Number(
+          updatedMenu.addedIngredients.reduce((total, name) => {
+            return total + getCostPerPiece(name);
+          }, 0)
+        ).toFixed(0)}
+        원
+      </div>
+
+      <div className="mb-12">
+        <table className="min-w-full rounded-lg border border-gray-300">
+          <thead className="bg-gray-300">
+            <tr>
+              <th className="px-2 py-1 border-r border-b text-center">항목</th>
+              <th className="px-2 py-1 border-b text-center">개당 원가</th>
+            </tr>
+          </thead>
+          <tbody>
+            {updatedMenu.addedIngredients.map((name) => {
+              const costPerPiece = getCostPerPiece(name); // 각 재료의 개당 원가 계산
+              return (
+                <tr key={name}>
+                  <td className="px-2 py-1 border-r border-b text-center">
+                    {name}
+                  </td>
+                  <td className="px-2 py-1 border-b text-center">
+                    {Number(costPerPiece).toFixed(0)}원
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="text-xs font-bold mb-4">재료 추가 시 원가</div>
+
+      <div className="mb-12">
+        <table className="min-w-full rounded-lg border border-gray-300">
+          <thead className="bg-gray-300">
+            <tr>
+              <th className="px-2 py-1 border-r border-b text-center">항목</th>
+              <th className="px-2 py-1 border-b text-center">값</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="px-2 py-1 border-r border-b text-center">
+                개당 원가
+              </td>
+              <td className="px-2 py-1 border-b text-center">
+                {(
+                  Number(calculatedMenu.costPerPiece) +
+                  selectedNames.reduce(
+                    (total, name) => total + getCostPerPiece(name),
+                    0
+                  )
+                ).toFixed(0)}
+                원
+              </td>
+            </tr>
+            <tr>
+              <td className="px-2 py-1 border-r border-b text-center">
+                마진율
+              </td>
+              <td className="px-2 py-1 border-b text-center">
+                {Number(
+                  calculateMargin(
+                    updatedMenu.pricePerPiece, // 1개당 판매가
+                    Number(calculatedMenu.costPerPiece) +
+                      selectedNames.reduce(
+                        (total, name) => total + getCostPerPiece(name),
+                        0
+                      ) // 1개당 원가
+                  )
+                ).toFixed(2)}
+                %
+              </td>
+            </tr>
+            <tr>
+              <td className="px-2 py-1 border-r border-b text-center">
+                개당 수익
+              </td>
+              <td className="px-2 py-1 border-b text-center">
+                {Number(
+                  calculateProfitPerPiece(
+                    updatedMenu.pricePerPiece, // 1개당 판매가
+                    Number(calculatedMenu.costPerPiece) +
+                      selectedNames.reduce(
+                        (total, name) => total + getCostPerPiece(name),
+                        0
+                      ) // 1개당 원가
+                  )
+                ).toFixed(0)}
+                원
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <div className="flex">
         <button
           onClick={handleDeleteMenu}
-          className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs"
+          className="mb-5 ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs"
         >
           메뉴 삭제하기
         </button>

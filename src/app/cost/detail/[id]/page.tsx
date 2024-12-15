@@ -1,5 +1,7 @@
 import CostDetailComponent from "./cost-detail-component";
 import fetchCostMenuItemById from "@/utils/fetchCostMenuItemById";
+import fetchCostIngredients from "@/utils/fetchCostIngredients";
+import { CostIngredient } from "@/types/cost-ingredient";
 
 type tParams = Promise<{ id: string }>;
 
@@ -8,6 +10,7 @@ export default async function Page(props: { params: tParams }) {
 
 
     const menu = await fetchCostMenuItemById(id);
+   const costIngredients: CostIngredient[] = await fetchCostIngredients();
 
 
   if (!menu) {
@@ -16,7 +19,7 @@ export default async function Page(props: { params: tParams }) {
 
   return (
     <div className="p-4 text-xs">
-      <CostDetailComponent menu={menu} />
+      <CostDetailComponent menu={menu} costIngredients={costIngredients}/>
     </div>
   );
 }
