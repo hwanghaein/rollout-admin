@@ -18,9 +18,9 @@ export default function ContentSwitcher({
   return (
     <div>
       {/* 버튼 2개 */}
-      <div className="flex space-x-4 mb-6">
+      <div className="flex text-sm space-x-4 mb-6">
         <button
-          className={`px-4 py-2 rounded ${
+          className={`px-3 py-2 rounded ${
             view === "menu" ? "bg-primary text-white" : "bg-gray-200"
           }`}
           onClick={() => setView("menu")}
@@ -28,7 +28,7 @@ export default function ContentSwitcher({
           메뉴로 보기
         </button>
         <button
-          className={`px-4 py-2 rounded ${
+          className={`px-3 py-2 rounded ${
             view === "ingredient" ? "bg-primary text-white" : "bg-gray-200"
           }`}
           onClick={() => setView("ingredient")}

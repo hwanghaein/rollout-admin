@@ -218,7 +218,7 @@ export default function CostClient({ costMenuList }: CostMenuProps) {
         </table>
       </div>
       <div className="mt-5 text-sm text-gray-600">
-        총 {filteredMenus.length}개의 메뉴가 등록돼 있습니다.
+        총 {filteredMenus.length}개의 메뉴가 등록돼있습니다.
       </div>
     </>
   );
