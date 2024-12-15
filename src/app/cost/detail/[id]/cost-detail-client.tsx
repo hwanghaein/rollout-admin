@@ -274,36 +274,48 @@ export default function CostMenuDetail({ menu }: { menu: CostMenu }) {
     }
   };
 
+  const handleGoCost = () => {
+    router.push(`/cost`);
+  };
+
+
+
+  // 마크업 부분
   return (
     <div className="md:max-w-[1100px] md:mx-auto">
-      <span className="text-dark2 text-xl mb-4">
-        {editingName ? (
-          <div className="flex items-center">
-            <input
-              type="text"
-              className="min-w-[295px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
-              placeholder={String(newName)}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-            <button
-              onClick={handleSaveName}
-              className="px-3 py-2 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
-            >
-              저장
-            </button>
-          </div>
-        ) : (
-          <div className="flex items-center">
-            {menu.name}
-            <button
-              onClick={handleEditName}
-              className="px-3 py-2 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
-            >
-              수정
-            </button>
-          </div>
-        )}
-      </span>
+      <div className="flex items-center justify-between mb-8">
+        <div className="text-dark2 text-xl">
+          {editingName ? (
+            <div className="flex items-center"> 
+              <input
+                type="text"
+                className="w-40 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                placeholder={String(newName)}
+                onChange={(e) => setNewName(e.target.value)}
+              />
+              <button
+                onClick={handleSaveName}
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
+              >
+                저장
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              {menu.name}
+              <button
+                onClick={handleEditName}
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+              >
+                수정
+              </button>
+            </div>
+          )}
+        </div>
+        <button onClick={handleGoCost} className="px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300">
+          목록으로 돌아가기
+        </button>
+      </div>
       {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4 ">
