@@ -363,13 +363,16 @@ export default function CostMenuDetail({
             </div>
           )}
         </div>
+
+      
         <button
           onClick={handleGoCost}
           className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
         >
           목록으로 돌아가기
         </button>
-      </div>
+      </div> 
+      
       {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4 ">
@@ -697,7 +700,7 @@ export default function CostMenuDetail({
       <div className="text-xs font-bold mb-4">
         추가된 재료들의 총 개당 원가:{" "}
         {Number(
-          updatedMenu.addedIngredients.reduce((total, name) => {
+          updatedMenu.addedIngredients?.reduce((total, name) => {
             return total + getCostPerPiece(name);
           }, 0)
         ).toFixed(0)}
@@ -713,7 +716,7 @@ export default function CostMenuDetail({
             </tr>
           </thead>
           <tbody>
-            {updatedMenu.addedIngredients.map((name) => {
+            {updatedMenu.addedIngredients?.map((name) => {
               const costPerPiece = getCostPerPiece(name); // 각 재료의 개당 원가 계산
               return (
                 <tr key={name}>
@@ -804,6 +807,8 @@ export default function CostMenuDetail({
           메뉴 삭제하기
         </button>
       </div>
+
+ 
     </div>
   );
 }

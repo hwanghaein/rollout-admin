@@ -19,5 +19,5 @@ export interface CostMenu {
   costPerPiece: number; // 개당 원가 (원)
   margin: number; // 마진율 (%)
   profitPerPiece: number; // 개당 수익 (원)
-  addedIngredients: string[]; // 추가된 재료 이름 배열
+  addedIngredients?: string[]; // 추가된 재료 이름 배열
 }
