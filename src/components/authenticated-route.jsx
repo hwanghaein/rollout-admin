@@ -1,21 +1,30 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../app/context/auth-context';
 
 export default function AuthenticatedRoute({ children }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
+  const alertShown = useRef(false); // alert 호출 여부 추적
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
+    if (!loading) {
+      if (!user && !alertShown.current) {
+        // 로그인하지 않았고 alert가 호출되지 않았다면
+        alert("로그인 후 이용이 가능합니다.");
+        alertShown.current = true; // alert 호출 상태로 설정
+        router.push('/login');
+      }
+      setHasCheckedAuth(true); // 로그인 상태 확인이 완료되면 true로 설정
     }
   }, [user, loading, router]);
 
-  if (loading) {
-    return <div>로딩 중입니다...</div>; 
+  if (loading || !hasCheckedAuth) {
+    // 로딩 중이거나 로그인 상태 확인이 완료되지 않으면 아무것도 렌더링하지 않음
+    return null;
   }
 
   return <>{children}</>; // 로그인된 경우 자식 컴포넌트 렌더링
