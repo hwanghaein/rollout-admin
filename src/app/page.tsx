@@ -7,7 +7,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen p-6 max-w-[1100px] mx-auto">
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {/* 매장 관리 */}
-        <div className="col-span-2 p-4 bg-gray-300 text-dark2 text-center rounded-lg">
+        <div className="col-span-2 bg-gray-200 p-4 rounded-lg shadow-md  text-dark2 text-center">
           <h3 className="text-xl mb-4">매장 관리</h3>
           <div className="grid grid-cols-2 gap-4">
             <Link href="/cost">
@@ -20,7 +20,7 @@ export default function Home() {
         </div>
 
         {/* 홈페이지 관리 */}
-        <div className="col-span-2 p-4 bg-gray-300 text-dark2 text-center rounded-lg">
+        <div className="col-span-2 p-4  text-dark2 text-center bg-gray-200 rounded-lg shadow-md ">
           <h3 className="text-xl mb-4">홈페이지 관리</h3>
           <div className="grid grid-cols-2 gap-4">
             <Link href="/menu">
