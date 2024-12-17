@@ -46,13 +46,10 @@ export default function CostMenuDetail({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // 모달 열기
-    const openModal = () => {
-      setIsModalOpen(true);
-    };
-  
-    
-  
+  // 모달 열기
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
   // 계산 결과
   const recalculateMenu = () => {
@@ -97,7 +94,6 @@ export default function CostMenuDetail({
 
   // 모달 닫기 및 배열 저장
   const handleSaveAddedIngredients = async () => {
-
     try {
       const menuDoc = doc(fireStore, "costMenuItems", menu.id);
       await updateDoc(menuDoc, { addedIngredients: selectedNames });
@@ -364,15 +360,14 @@ export default function CostMenuDetail({
           )}
         </div>
 
-      
         <button
           onClick={handleGoCost}
           className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
         >
           목록으로 돌아가기
         </button>
-      </div> 
-      
+      </div>
+
       {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4 ">
@@ -472,7 +467,7 @@ export default function CostMenuDetail({
                   재료명
                 </th>
                 <th
-                  className="px-1 py-1 border-r border-b text-center"
+                  className="px-1 py-1 border-r border-b  text-center"
                   style={{ minWidth: "60px" }}
                 >
                   구매가
@@ -514,7 +509,7 @@ export default function CostMenuDetail({
                         />
                         <button
                           onClick={() => handleDeleteIngredient(index)}
-                          className="px-1 items-center bg-gray-100 border-y border-r border-gray-300 text-gray-700"
+                          className="px-1 items-center bg-gray-100 border-y border-x border-gray-300 text-gray-700"
                         >
                           X
                         </button>
@@ -684,7 +679,10 @@ export default function CostMenuDetail({
       </div>
 
       {/* / 재료추가 */}
-      <button onClick={openModal} className="mb-7 px-2 py-1 cursor-pointer rounded-md text-xs border  bg-blue-500 text-white border-blue-500">
+      <button
+        onClick={openModal}
+        className="mb-7 px-2 py-1 cursor-pointer rounded-md text-xs border  bg-blue-500 text-white border-blue-500"
+      >
         재료 추가하기
       </button>
 
@@ -693,19 +691,21 @@ export default function CostMenuDetail({
           costIngredients={costIngredients}
           selectedNames={selectedNames}
           setSelectedNames={setSelectedNames}
-          handleSaveAddedIngredients={handleSaveAddedIngredients} 
+          handleSaveAddedIngredients={handleSaveAddedIngredients}
         />
       )}
 
-      <div className="text-xs font-bold mb-4">
-        추가된 재료들의 총 개당 원가:{" "}
-        {Number(
-          updatedMenu.addedIngredients?.reduce((total, name) => {
-            return total + getCostPerPiece(name);
-          }, 0)
-        ).toFixed(0)}
-        원
-      </div>
+<div className="text-xs font-bold mb-4">
+  추가된 재료들의 총 개당 원가:{" "}
+  {Number(
+    updatedMenu.addedIngredients?.reduce(
+      (total, name) => total + getCostPerPiece(name),
+      0
+    ) || 0 
+  ).toFixed(0)}
+  원
+</div>
+
 
       <div className="mb-12">
         <table className="min-w-full rounded-lg border border-gray-300">
@@ -735,69 +735,70 @@ export default function CostMenuDetail({
 
       <div className="text-xs font-bold mb-4">재료 추가 시 원가</div>
 
-      <div className="mb-12">
-        <table className="min-w-full rounded-lg border border-gray-300">
-          <thead className="bg-gray-300">
-            <tr>
-              <th className="px-2 py-1 border-r border-b text-center">항목</th>
-              <th className="px-2 py-1 border-b text-center">값</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
-                개당 원가
-              </td>
-              <td className="px-2 py-1 border-b text-center">
-                {(
-                  Number(calculatedMenu.costPerPiece) +
-                  selectedNames.reduce(
-                    (total, name) => total + getCostPerPiece(name),
-                    0
-                  )
-                ).toFixed(0)}
-                원
-              </td>
-            </tr>
-            <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
-                마진율
-              </td>
-              <td className="px-2 py-1 border-b text-center">
-                {Number(
-                  calculateMargin(
-                    updatedMenu.pricePerPiece, // 1개당 판매가
-                    Number(calculatedMenu.costPerPiece) +
-                      selectedNames.reduce(
-                        (total, name) => total + getCostPerPiece(name),
-                        0
-                      ) // 1개당 원가
-                  )
-                ).toFixed(2)}
-                %
-              </td>
-            </tr>
-            <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
-                개당 수익
-              </td>
-              <td className="px-2 py-1 border-b text-center">
-                {Number(
-                  calculateProfitPerPiece(
-                    updatedMenu.pricePerPiece, // 1개당 판매가
-                    Number(calculatedMenu.costPerPiece) +
-                      selectedNames.reduce(
-                        (total, name) => total + getCostPerPiece(name),
-                        0
-                      ) // 1개당 원가
-                  )
-                ).toFixed(0)}
-                원
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<div className="mb-12">
+  <table className="min-w-full rounded-lg border border-gray-300">
+    <thead className="bg-gray-300">
+      <tr>
+        <th className="px-2 py-1 border-r border-b text-center">항목</th>
+        <th className="px-2 py-1 border-b text-center">값</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td className="px-2 py-1 border-r border-b text-center">개당 원가</td>
+        <td className="px-2 py-1 border-b text-center">
+          {(
+            Number(calculatedMenu.costPerPiece) +
+            (updatedMenu.addedIngredients?.length
+              ? updatedMenu.addedIngredients.reduce(
+                  (total, name) => total + getCostPerPiece(name),
+                  0
+                )
+              : 0)
+          ).toFixed(0)}
+          원
+        </td>
+      </tr>
+      <tr>
+        <td className="px-2 py-1 border-r border-b text-center">마진율</td>
+        <td className="px-2 py-1 border-b text-center">
+          {Number(
+            calculateMargin(
+              updatedMenu.pricePerPiece, // 1개당 판매가
+              Number(calculatedMenu.costPerPiece) +
+                (updatedMenu.addedIngredients?.length
+                  ? updatedMenu.addedIngredients.reduce(
+                      (total, name) => total + getCostPerPiece(name),
+                      0
+                    )
+                  : 0) // 1개당 원가
+            )
+          ).toFixed(2)}
+          %
+        </td>
+      </tr>
+      <tr>
+        <td className="px-2 py-1 border-r border-b text-center">개당 수익</td>
+        <td className="px-2 py-1 border-b text-center">
+          {Number(
+            calculateProfitPerPiece(
+              updatedMenu.pricePerPiece, // 1개당 판매가
+              Number(calculatedMenu.costPerPiece) +
+                (updatedMenu.addedIngredients?.length
+                  ? updatedMenu.addedIngredients.reduce(
+                      (total, name) => total + getCostPerPiece(name),
+                      0
+                    )
+                  : 0) // 1개당 원가
+            )
+          ).toFixed(0)}
+          원
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
       <div className="flex">
         <button
@@ -807,8 +808,6 @@ export default function CostMenuDetail({
           메뉴 삭제하기
         </button>
       </div>
-
- 
     </div>
   );
 }

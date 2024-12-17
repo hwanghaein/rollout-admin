@@ -38,7 +38,7 @@ export default function ContentSwitcher({
       </div>
 
       {/* 조건부 렌더링 */}
-      {view === "menu" && <CostComponent costMenuList={costMenuList} />}
+      {view === "menu" && <CostComponent costMenuList={costMenuList}  costIngredients={costIngredients}/>}
       {view === "ingredient" && (
         <IngredientComponent costIngredients={costIngredients} />
       )}

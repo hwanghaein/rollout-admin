@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { doc, setDoc } from "firebase/firestore";
 import { collection, onSnapshot } from "firebase/firestore";
 import fireStore from "../../../firebase/firestore";
+import { CostIngredient } from "@/types/cost-ingredient";
 import {
   calculateTotalCost,
   calculateCostPerPiece,
@@ -14,16 +15,31 @@ import {
 } from "./../../utils/calculate";
 import { FaSearch } from "react-icons/fa";
 
-interface CostMenuProps {
+export default function CostClient({
+  costMenuList,
+  costIngredients,
+}: {
   costMenuList: CostMenu[];
-}
-
-export default function CostClient({ costMenuList }: CostMenuProps) {
+  costIngredients: CostIngredient[];
+}) {
   const router = useRouter();
   const [newMenuName, setNewMenuName] = useState(""); // 사용자 입력 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
   const [calculatedMenus, setCalculatedMenus] = useState<CostMenu[]>([]); // 계산된 메뉴 리스트
   const [searchQuery, setSearchQuery] = useState(""); // 검색 쿼리 상태
+
+  // 추가된 재료의 원가 계산
+  const getCostPerPiece = (ingredientName: string): number => {
+    const selectedIngredient = costIngredients.find(
+      (ingredient) => ingredient.name === ingredientName
+    );
+
+    if (selectedIngredient) {
+      const totalCost = calculateTotalCost(selectedIngredient.ingredients); // 총 원가 계산
+      return calculateCostPerPiece(totalCost, selectedIngredient.salesQuantity); // 개당 원가 계산
+    }
+    return 0; // 재료가 없으면 0 반환
+  };
 
   // 메뉴 데이터를 계산하여 상태에 저장
   useEffect(() => {
@@ -186,7 +202,7 @@ export default function CostClient({ costMenuList }: CostMenuProps) {
               <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
                 판매가
               </th>
-              <th className=" px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
+              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
                 마진율
               </th>
             </tr>
@@ -202,15 +218,40 @@ export default function CostClient({ costMenuList }: CostMenuProps) {
                   {item.name}
                 </td>
                 <td className="px-3 py-2 border-x border-gray-200">
+                  {/* 총원가 */}
                   {item.totalCost === 0
                     ? "0원"
-                    : `${Number(item.totalCost).toFixed(0)}원`}
+                    : `${Number(
+                        item.totalCost +
+                          (item.addedIngredients?.length
+                            ? item.addedIngredients.reduce(
+                                (total, name) => total + getCostPerPiece(name),
+                                0
+                              )
+                            : 0)
+                      ).toFixed(0)}원`}
                 </td>
                 <td className="px-3 py-2 border-x border-gray-200">
+                  {/* 판매가 */}
                   {Number(item.pricePerPiece).toFixed(0)}원
                 </td>
                 <td className="px-3 py-2 border-x border-gray-200">
-                  {item.margin === 0 ? "0%" : `${Number(item.margin).toFixed(2)}%`}
+                  {/* 마진율 */}
+                  {item.margin === 0
+                    ? "0%"
+                    : `${Number(
+                        calculateMargin(
+                          item.pricePerPiece,
+                          item.totalCost +
+                            (item.addedIngredients?.length
+                              ? item.addedIngredients.reduce(
+                                  (total, name) =>
+                                    total + getCostPerPiece(name),
+                                  0
+                                )
+                              : 0)
+                        )
+                      ).toFixed(2)}%`}
                 </td>
               </tr>
             ))}
