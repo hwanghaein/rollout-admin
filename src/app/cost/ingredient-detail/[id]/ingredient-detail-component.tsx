@@ -205,6 +205,10 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
     recalculateMenu();
   };
 
+  const handleGoCost = () => {
+    router.push("/cost?view=ingredient");
+  };
+
   // "재료 전체"를 firebase 데이터 삭제
   const handleDeleteMenu = async () => {
     if (window.confirm("해당 재료를 정말 삭제하시겠습니까?")) {
@@ -212,7 +216,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
         const menuDoc = doc(fireStore, "costIngredients", menu.id);
         await deleteDoc(menuDoc); // Firebase에서 재료전체 삭제
         alert("재료가 삭제되었습니다.");
-        router.push("/cost");
+        router.replace("/cost?view=ingredient");
       } catch (error) {
         console.error("Error deleting menu: ", error);
         alert("재료 삭제 중 오류가 발생했습니다.");
@@ -222,9 +226,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
     }
   };
 
-  const handleGoCost = () => {
-    router.push(`/cost`);
-  };
+
 
 
 

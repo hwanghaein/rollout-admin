@@ -678,13 +678,15 @@ export default function CostMenuDetail({
         </table>
       </div>
 
-      {/* / 재료추가 */}
-      <button
-        onClick={openModal}
-        className="mb-7 px-2 py-1 cursor-pointer rounded-md text-xs border  bg-blue-500 text-white border-blue-500"
-      >
-        재료 추가하기
-      </button>
+{/* / 재료추가 */}
+<button
+  onClick={openModal}
+  className="mb-7 px-3 py-2 cursor-pointer rounded-md text-sm border bg-blue-500 text-white border-blue-500"
+>
+  {updatedMenu.addedIngredients && updatedMenu.addedIngredients.length > 0
+    ? "재료 수정하기"
+    : "재료 추가하기"}
+</button>
 
       {isModalOpen && (
         <SearchModal
@@ -695,17 +697,16 @@ export default function CostMenuDetail({
         />
       )}
 
-<div className="text-xs font-bold mb-4">
-  추가된 재료들의 총 개당 원가:{" "}
-  {Number(
-    updatedMenu.addedIngredients?.reduce(
-      (total, name) => total + getCostPerPiece(name),
-      0
-    ) || 0 
-  ).toFixed(0)}
-  원
-</div>
-
+      <div className="text-sm font-bold mb-4">
+        추가된 재료들의 총 개당 원가:{" "}
+        {Number(
+          updatedMenu.addedIngredients?.reduce(
+            (total, name) => total + getCostPerPiece(name),
+            0
+          ) || 0
+        ).toFixed(0)}
+        원
+      </div>
 
       <div className="mb-12">
         <table className="min-w-full rounded-lg border border-gray-300">
@@ -716,89 +717,102 @@ export default function CostMenuDetail({
             </tr>
           </thead>
           <tbody>
-            {updatedMenu.addedIngredients?.map((name) => {
-              const costPerPiece = getCostPerPiece(name); // 각 재료의 개당 원가 계산
-              return (
-                <tr key={name}>
-                  <td className="px-2 py-1 border-r border-b text-center">
-                    {name}
-                  </td>
-                  <td className="px-2 py-1 border-b text-center">
-                    {Number(costPerPiece).toFixed(0)}원
-                  </td>
-                </tr>
-              );
-            })}
+            {updatedMenu.addedIngredients === undefined || updatedMenu.addedIngredients?.length === 0 ? (
+              <tr>
+                <td colSpan={2} className="px-2 py-1 text-center text-gray-500">
+                  "재료 추가하기"를 눌러서 재료를 추가해보세요!
+                </td>
+              </tr>
+            ) : (
+              updatedMenu.addedIngredients?.map((name) => {
+                const costPerPiece = getCostPerPiece(name); // 각 재료의 개당 원가 계산
+                return (
+                  <tr key={name}>
+                    <td className="px-2 py-1 border-r border-b text-center">
+                      {name}
+                    </td>
+                    <td className="px-2 py-1 border-b text-center">
+                      {Number(costPerPiece).toFixed(0)}원
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
 
-      <div className="text-xs font-bold mb-4">재료 추가 시 원가</div>
+      <div className="text-sm font-bold mb-4">재료 추가 시 최종 원가</div>
 
-<div className="mb-12">
-  <table className="min-w-full rounded-lg border border-gray-300">
-    <thead className="bg-gray-300">
-      <tr>
-        <th className="px-2 py-1 border-r border-b text-center">항목</th>
-        <th className="px-2 py-1 border-b text-center">값</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td className="px-2 py-1 border-r border-b text-center">개당 원가</td>
-        <td className="px-2 py-1 border-b text-center">
-          {(
-            Number(calculatedMenu.costPerPiece) +
-            (updatedMenu.addedIngredients?.length
-              ? updatedMenu.addedIngredients.reduce(
-                  (total, name) => total + getCostPerPiece(name),
-                  0
-                )
-              : 0)
-          ).toFixed(0)}
-          원
-        </td>
-      </tr>
-      <tr>
-        <td className="px-2 py-1 border-r border-b text-center">마진율</td>
-        <td className="px-2 py-1 border-b text-center">
-          {Number(
-            calculateMargin(
-              updatedMenu.pricePerPiece, // 1개당 판매가
-              Number(calculatedMenu.costPerPiece) +
-                (updatedMenu.addedIngredients?.length
-                  ? updatedMenu.addedIngredients.reduce(
-                      (total, name) => total + getCostPerPiece(name),
-                      0
-                    )
-                  : 0) // 1개당 원가
-            )
-          ).toFixed(2)}
-          %
-        </td>
-      </tr>
-      <tr>
-        <td className="px-2 py-1 border-r border-b text-center">개당 수익</td>
-        <td className="px-2 py-1 border-b text-center">
-          {Number(
-            calculateProfitPerPiece(
-              updatedMenu.pricePerPiece, // 1개당 판매가
-              Number(calculatedMenu.costPerPiece) +
-                (updatedMenu.addedIngredients?.length
-                  ? updatedMenu.addedIngredients.reduce(
-                      (total, name) => total + getCostPerPiece(name),
-                      0
-                    )
-                  : 0) // 1개당 원가
-            )
-          ).toFixed(0)}
-          원
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
+      <div className="mb-12">
+        <table className="min-w-full rounded-lg border border-gray-300">
+          <thead className="bg-gray-300">
+            <tr>
+              <th className="px-2 py-1 border-r border-b text-center">항목</th>
+              <th className="px-2 py-1 border-b text-center">값</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="px-2 py-1 border-r border-b text-center">
+                개당 원가
+              </td>
+              <td className="px-2 py-1 border-b text-center">
+                {(
+                  Number(calculatedMenu.costPerPiece) +
+                  (updatedMenu.addedIngredients?.length
+                    ? updatedMenu.addedIngredients.reduce(
+                        (total, name) => total + getCostPerPiece(name),
+                        0
+                      )
+                    : 0)
+                ).toFixed(0)}
+                원
+              </td>
+            </tr>
+            <tr>
+              <td className="px-2 py-1 border-r border-b text-center">
+                마진율
+              </td>
+              <td className="px-2 py-1 border-b text-center">
+                {Number(
+                  calculateMargin(
+                    updatedMenu.pricePerPiece, // 1개당 판매가
+                    Number(calculatedMenu.costPerPiece) +
+                      (updatedMenu.addedIngredients?.length
+                        ? updatedMenu.addedIngredients.reduce(
+                            (total, name) => total + getCostPerPiece(name),
+                            0
+                          )
+                        : 0) // 1개당 원가
+                  )
+                ).toFixed(2)}
+                %
+              </td>
+            </tr>
+            <tr>
+              <td className="px-2 py-1 border-r border-b text-center">
+                개당 수익
+              </td>
+              <td className="px-2 py-1 border-b text-center">
+                {Number(
+                  calculateProfitPerPiece(
+                    updatedMenu.pricePerPiece, // 1개당 판매가
+                    Number(calculatedMenu.costPerPiece) +
+                      (updatedMenu.addedIngredients?.length
+                        ? updatedMenu.addedIngredients.reduce(
+                            (total, name) => total + getCostPerPiece(name),
+                            0
+                          )
+                        : 0) // 1개당 원가
+                  )
+                ).toFixed(0)}
+                원
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div className="flex">
         <button

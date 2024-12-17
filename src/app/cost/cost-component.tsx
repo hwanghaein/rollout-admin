@@ -84,7 +84,7 @@ export default function CostClient({
   }, []);
 
   const handleClick = (id: string) => {
-    router.push(`/cost/detail/${id}`);
+    router.push(`/cost/detail/${id}?view=menu`);
   };
 
   // 메뉴 이름 입력 변경

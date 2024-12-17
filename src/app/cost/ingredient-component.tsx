@@ -59,7 +59,7 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
   }, []);
 
   const handleClick = (id: string) => {
-    router.push(`/cost/ingredient-detail/${id}`);
+    router.push(`/cost/ingredient-detail/${id}?view=ingredient`);
   };
 
   // 재료 이름 입력 변경
@@ -88,7 +88,7 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
 
       setIsModalOpen(false);
       alert(`${newIngredientName} 재료가 추가되었습니다.`);
-      router.push("/cost");
+      router.push("/cost?view=ingredient");
       setNewIngredientName("");
     }
   };
@@ -139,7 +139,7 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
               value={newIngredientName}
               onChange={handleIngredientNameChange}
               placeholder="재료 이름을 입력하세요"
-              className="w-full px-4 py-2 border border-gray-300 rounded mb-4 text-sm"
+              className="w-full px-2 py-2 border border-gray-300 rounded mb-4 text-sm"
             />
             <div className="flex justify-end gap-2">
               <button

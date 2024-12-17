@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { CostMenu } from "@/types/cost-menu";
 import { CostIngredient } from "@/types/cost-ingredient";
 import CostComponent from "./cost-component";
@@ -13,7 +14,17 @@ export default function ContentSwitcher({
   costMenuList: CostMenu[];
   costIngredients: CostIngredient[];
 }) {
+  const searchParams = useSearchParams();
   const [view, setView] = useState<"menu" | "ingredient">("menu");
+
+  useEffect(() => {
+    const viewParam = searchParams.get("view");
+    if (viewParam === "ingredient" || viewParam === "menu") {
+      setView(viewParam); 
+    } else {
+      setView("menu"); 
+    }
+  }, [searchParams]);
 
   return (
     <div>

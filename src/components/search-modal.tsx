@@ -36,56 +36,54 @@ export default function SearchModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg animate-fadeIn">
-        {/* 상단 */}
-        <div className="flex mb-6 justify-between items-center">
-          <span className="text-[16px] text-dark2 ">재료 검색</span>
-          <input
-            type="text"
-            placeholder="검색어를 입력하세요"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="ml-4 px-1 py-1 border border-gray-300 rounded-md"
-          />
-          <FaSearch className=" text-gray-500 text-lg ml-2" />
-        </div>
-
-        {/* 리스트 */}
-        <ul className="list-none p-0">
-          {filteredIngredients.map((ingredient) => (
-            <li key={ingredient.id} className="mb-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  value={ingredient.name}
-                  checked={selectedNames.includes(ingredient.name)}
-                  onChange={() => handleCheckboxChange(ingredient.name)}
-                  className="mr-2"
-                />
-                {ingredient.name}
-              </label>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex justify-between">
-        {/* 선택 완료 버튼 */}
-        <button
-          onClick={handleSubmit}
-          className="mt-6 mr-2 px-3 py-2 text-white rounded-lg bg-blue-500"
-        >
-          저장하기
-        </button>
-
-        {/* 모달 닫기 버튼 */}
-        {/* <button
-          onClick={closeModal}
-          className="mt-6 px-3 py-2 bg-dark2 text-white rounded-lg "
-        >
-          닫기
-        </button> */}
-        </div>
-      </div>
+  <div className="bg-white w-[360px] h-[430px] p-6 rounded-lg shadow-lg animate-fadeIn flex flex-col">
+    {/* 상단 */}
+    <div className="flex mb-8 justify-between items-center">
+      <span className="text-[24px] text-dark2 ">재료 검색</span>
+      <input
+        type="text"
+        placeholder="검색어를 입력하세요"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="ml-4 px-1 py-1 border border-gray-300 rounded-md text-[20px] w-[180px]"
+      />
+      <FaSearch className=" text-gray-500 text-lg ml-2" />
     </div>
+
+    {/* 리스트 */}
+    <div className="flex overflow-y-auto h-[260px] py-5 px-5 bg-gray-100  mb-6">
+      <ul className="list-none p-0">
+        {filteredIngredients.map((ingredient) => (
+          <li key={ingredient.id} className=" text-[20px] mb-5">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                value={ingredient.name}
+                checked={selectedNames.includes(ingredient.name)}
+                onChange={() => handleCheckboxChange(ingredient.name)}
+                className="mr-2"
+              />
+              {ingredient.name}
+            </label>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div className="flex justify-between">
+      {/* 선택 완료 버튼 */}
+      <div className="flex flex-col text-blue-600 gap-1">
+      <span>* 체크된 항목들이 재료 목록에 반영됩니다.</span>
+      <span>* 삭제를 하려면 체크를 해제하세요.</span>
+      </div>
+      <button
+        onClick={handleSubmit}
+        className="px-4 py-3 ml-auto text-white rounded-lg bg-blue-500  text-[20px]"
+      >
+        저장하기
+      </button>
+    </div>
+  </div>
+</div>
   );
 }
