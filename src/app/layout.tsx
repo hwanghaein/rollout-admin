@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/header";
+import { AuthProvider } from './context/auth-context';
 
 export default function RootLayout({
   children,
@@ -8,6 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <AuthProvider>
     <html lang="ko">
       <body>
         <div className="flex flex-col flex-grow  min-h-screen">
@@ -17,5 +18,6 @@ export default function RootLayout({
 
       </body>
     </html>
+    </AuthProvider>
   );
 }

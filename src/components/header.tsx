@@ -3,13 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa"; 
+import { FaBars, FaTimes, FaUser } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
+import { useAuth } from "../app/context/auth-context";
 
 export default function Header() {
-
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 햄버거 메뉴의 토글 상태를 관리하는 상태 변수
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false); 
+  const { user, logout } = useAuth(); // 로그인 상태와 로그아웃 함수
+
+
 
   return (
     <div>
@@ -38,31 +43,82 @@ export default function Header() {
           {/* 메뉴바 - 데스크탑에서만 보이도록 설정 */}
           <nav className="hidden md:flex flex-grow justify-end whitespace-nowrap">
             <ul className="text-13 text-gray1 flex h-16 items-center m-0 p-0 space-x-1">
-            <Link href={"/cost"} className="px-5 h-full flex items-center justify-center">
+              <Link
+                href={"/cost"}
+                className="px-5 h-full flex items-center justify-center"
+              >
                 <li>단가 계산</li>
               </Link>
-              <Link href={"/recipe"} className="px-5 h-full flex items-center justify-center">
+              <Link
+                href={"/recipe"}
+                className="px-5 h-full flex items-center justify-center"
+              >
                 <li>레시피</li>
               </Link>
-              <Link href={"/menu"} className="px-5 h-full flex items-center justify-center">
+              <Link
+                href={"/menu"}
+                className="px-5 h-full flex items-center justify-center"
+              >
                 <li>메뉴</li>
               </Link>
-              <Link href={"/store"} className="px-5 h-full flex items-center justify-center">
+              <Link
+                href={"/store"}
+                className="px-5 h-full flex items-center justify-center"
+              >
                 <li>스토어</li>
               </Link>
-              <Link href={"/about-rollout"} className="px-5 h-full flex items-center justify-center">
+              <Link
+                href={"/about-rollout"}
+                className="px-5 h-full flex items-center justify-center"
+              >
                 <li>롤아웃 커피</li>
               </Link>
-              <Link href={"/photo-gallery"} className="px-5 h-full flex items-center justify-center">
+              <Link
+                href={"/photo-gallery"}
+                className="px-5 h-full flex items-center justify-center"
+              >
                 <li>포토 갤러리</li>
               </Link>
+              {user ? (
+     
+                  <Link
+                    href={"/mypage"}
+                    className="px-5 h-full flex items-center justify-center"
+                  >
+                    <li>마이페이지</li>
+                  </Link>
+
+              ) : (
+                <Link
+                  href={"/login"}
+                  className="px-5 h-full flex items-center justify-center"
+                >
+                  <li>로그인</li>
+                </Link>
+              )}
             </ul>
           </nav>
+          <div>
+
+          {/* 로그인 버튼 - 모바일과 태블릿에서만 보이도록 설정  */}
+          {user ? (
+              <button
+                className="md:hidden p-2"
+                onClick={() => router.push('/mypage')}
+              >
+                <FaUser className="text-2xl text-gray1 mr-3" />
+              </button>
+            ) : (
+              <button className="md:hidden p-2" onClick={() => router.push('/login')}>
+                <FaUser className="text-2xl text-gray1 mr-3" />
+              </button>
+            )}
 
           {/* 햄버거 버튼 - 모바일과 태블릿에서만 보이도록 설정 */}
           <button className="md:hidden p-2" onClick={toggleMenu}>
             <FaBars className="text-2xl text-gray1" />
           </button>
+          </div>
         </div>
       </header>
 
@@ -77,26 +133,50 @@ export default function Header() {
           className="absolute top-6 right-5 text-white"
           onClick={closeMenu}
         >
-           <FaTimes className="text-4xl text-gray1" />
+          <FaTimes className="text-4xl text-gray1" />
         </button>
         <ul className="text-13 text-gray1 flex flex-col items-start text-left text-base">
           <li className="py-10 pl-4 w-full text-left border-gray3 bg-brown2"></li>
-          <Link href={"/cost"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+          <Link
+            href={"/cost"}
+            className="py-6 pl-4 w-full text-left border-b-2 border-gray3"
+            onClick={closeMenu}
+          >
             <li>단가 계산</li>
           </Link>
-          <Link href={"/recipe"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+          <Link
+            href={"/recipe"}
+            className="py-6 pl-4 w-full text-left border-b-2 border-gray3"
+            onClick={closeMenu}
+          >
             <li>레시피</li>
           </Link>
-          <Link href={"/menu"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+          <Link
+            href={"/menu"}
+            className="py-6 pl-4 w-full text-left border-b-2 border-gray3"
+            onClick={closeMenu}
+          >
             <li>메뉴</li>
           </Link>
-          <Link href={"/store"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+          <Link
+            href={"/store"}
+            className="py-6 pl-4 w-full text-left border-b-2 border-gray3"
+            onClick={closeMenu}
+          >
             <li>스토어</li>
           </Link>
-          <Link href={"/about-rollout"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+          <Link
+            href={"/about-rollout"}
+            className="py-6 pl-4 w-full text-left border-b-2 border-gray3"
+            onClick={closeMenu}
+          >
             <li>롤아웃 커피</li>
           </Link>
-          <Link href={"/photo-gallery"} className="py-6 pl-4 w-full text-left border-b-2 border-gray3" onClick={closeMenu}>
+          <Link
+            href={"/photo-gallery"}
+            className="py-6 pl-4 w-full text-left border-b-2 border-gray3"
+            onClick={closeMenu}
+          >
             <li>포토 갤러리</li>
           </Link>
         </ul>
