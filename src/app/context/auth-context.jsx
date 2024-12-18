@@ -3,12 +3,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../../../firebase/firebasedb'; 
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { useRouter } from "next/navigation";
 
 const AuthContext = createContext();
-
+ 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); 
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -23,9 +25,12 @@ export function AuthProvider({ children }) {
     if (!confirmLogout) {
       return;
     }
-  
+
     await signOut(auth);
-    setUser(null);
+    setUser(null);  
+    setLoading(true);  
+    router.push("/");  
+    alert("로그아웃 되었습니다.")
   };
 
   return (
@@ -34,5 +39,6 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
 
 export const useAuth = () => useContext(AuthContext);

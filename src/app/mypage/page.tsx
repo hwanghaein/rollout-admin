@@ -26,8 +26,8 @@ export default function MyPage() {
 
   const handleLogout = async () => {
     await logout();
-    router.push("/");
   };
+  
 
   const handlePasswordChange = async () => {
     if (!newPassword || !confirmPassword) {

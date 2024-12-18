@@ -16,9 +16,11 @@ export default function AuthenticatedRoute({ children }) {
         // 로그인하지 않았고 alert가 호출되지 않았다면
         alert("로그인 후 이용이 가능합니다.");
         alertShown.current = true; // alert 호출 상태로 설정
-        router.push('/login');
+        router.push('/login'); // 로그인 페이지로 리디렉션
+      } else if (user) {
+        // 사용자가 로그인 상태라면 바로 렌더링
+        setHasCheckedAuth(true);
       }
-      setHasCheckedAuth(true); // 로그인 상태 확인이 완료되면 true로 설정
     }
   }, [user, loading, router]);
 
