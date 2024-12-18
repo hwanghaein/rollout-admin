@@ -48,6 +48,7 @@ export default function CostMenuDetail({
 
   // 모달 열기
   const openModal = () => {
+    setSelectedNames(updatedMenu.addedIngredients || [])
     setIsModalOpen(true);
   };
 

@@ -47,6 +47,8 @@ export default function SearchModal({
     handleSaveAddedIngredients(); // 선택 후 모달 닫기
   };
 
+  
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
