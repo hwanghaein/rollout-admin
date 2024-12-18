@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CostIngredient } from "@/types/cost-ingredient";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 
 export default function SearchModal({
   costIngredients,
@@ -15,7 +15,7 @@ export default function SearchModal({
   handleSaveAddedIngredients: () => void;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어
+  const [searchTerm, setSearchTerm] = useState("");
 
   // 모달 닫기
   const closeModal = () => {
@@ -44,7 +44,7 @@ export default function SearchModal({
   // 선택 완료 버튼 핸들러
   const handleSubmit = () => {
     console.log("Selected ingredients:", selectedNames);
-    handleSaveAddedIngredients(); // 선택 후 모달 닫기
+    handleSaveAddedIngredients();
   };
 
   return (
@@ -71,7 +71,7 @@ export default function SearchModal({
             {filteredIngredients.map((ingredient) => (
               <li
                 key={ingredient.id}
-                className="text-sm p-2 bg-gray-100 rounded shadow-sm" // 색상 통일
+                className="text-sm p-2 bg-gray-100 rounded"
               >
                 <label className="flex items-center">
                   <input
