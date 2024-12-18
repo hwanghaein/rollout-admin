@@ -47,8 +47,6 @@ export default function SearchModal({
     handleSaveAddedIngredients(); // 선택 후 모달 닫기
   };
 
-  
-
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -65,7 +63,6 @@ export default function SearchModal({
             className="ml-4 px-3 py-1 border border-gray-300 rounded text-sm w-[180px]"
           />
           <FaSearch className="text-gray-500 text-lg ml-2" />
-          
         </div>
 
         {/* 리스트 */}
@@ -90,27 +87,26 @@ export default function SearchModal({
             ))}
           </ul>
         </div>
+        <div className="flex flex-col text-blue-600 gap-1 mt-5">
+          <span>* 체크된 항목들이 재료 목록에 반영됩니다.</span>
+          <span>* 삭제를 하려면 체크를 해제하세요.</span>
+        </div>
 
         <div className="flex mt-4 gap-5">
-        <button
+          <button
             onClick={handleSubmit}
             className="px-3 py-2 ml-auto text-white rounded-lg bg-blue-500 text-sm"
           >
             저장하기
           </button>
-        <button
+          <button
             onClick={closeModal}
             className="px-3 py-2 text-black rounded-lg bg-gray-300 text-sm"
           >
             취소
           </button>
-    
-          
         </div>
-        <div className="flex flex-col text-blue-600 gap-1 mt-5">
-            <span>* 체크된 항목들이 재료 목록에 반영됩니다.</span>
-            <span>* 삭제를 하려면 체크를 해제하세요.</span>
-          </div>
+
       </div>
     </div>
   );
