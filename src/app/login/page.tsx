@@ -33,7 +33,7 @@ export default function Page() {
     <div className="flex flex-col px-4 md:w-full max-w-[500px] mx-auto pt-7 pb-20 md:mt-16">
       <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">로그인</h2>
       
-      {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+     
       
       <form onSubmit={handleLogin}>
         <div className="mb-6">
@@ -68,6 +68,8 @@ export default function Page() {
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
+
+        {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
         <button
           type="submit"
