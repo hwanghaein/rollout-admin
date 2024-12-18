@@ -331,14 +331,14 @@ export default function CostMenuDetail({
   // 마크업 부분
   return (
     <div className="md:max-w-[1100px] md:mx-auto">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center  mb-8">
         <div className="text-dark2 text-xl">
           {editingName ? (
             <div className="flex items-center">
               <input
                 type="text"
-                className="w-40 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
-                placeholder={String(newName)}
+                className="w-[200px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                placeholder={String(updatedMenu.name)}
                 onChange={(e) => setNewName(e.target.value)}
               />
               <button
@@ -350,7 +350,7 @@ export default function CostMenuDetail({
             </div>
           ) : (
             <div className="flex items-center">
-              {menu.name}
+              {updatedMenu.name}
               <button
                 onClick={handleEditName}
                 className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
@@ -363,7 +363,7 @@ export default function CostMenuDetail({
 
         <button
           onClick={handleGoCost}
-          className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+          className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 ml-auto"
         >
           목록으로 돌아가기
         </button>
