@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { CostIngredient, Ingredients } from "@/types/cost-ingredient";
-import { doc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
+import { CostMenu } from "@/types/cost-menu";
+import { doc, updateDoc, getDoc, deleteDoc, getDocs, collection } from "firebase/firestore";
 import fireStore from "../../../../../firebase/firestore";
 import { useRouter } from "next/navigation";
 import {
@@ -45,6 +46,8 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
     recalculateMenu();
   }, []);
 
+  
+
   // "재료 이름" 수정 토글 관리
   const handleEditName = () => {
     setEditingName(true);
@@ -80,6 +83,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
       setEditingName(false);
       setNameError("");
       alert("재료 이름이 저장되었습니다.");
+      
     } catch (error) {
       console.error("Error updating name: ", error);
     }
@@ -209,12 +213,34 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
     router.push("/cost?view=ingredient");
   };
 
+  
+
   // "재료 전체"를 firebase 데이터 삭제
-  const handleDeleteMenu = async () => {
+  const handleDeleteMenu = async (menuId: string, menuName: string) => {
+  
     if (window.confirm("해당 재료를 정말 삭제하시겠습니까?")) {
       try {
-        const menuDoc = doc(fireStore, "costIngredients", menu.id);
-        await deleteDoc(menuDoc); // Firebase에서 재료전체 삭제
+        // 1. `costIngredients`에서 재료 삭제
+        const menuDoc = doc(fireStore, "costIngredients", menuId);
+        await deleteDoc(menuDoc);
+  
+        // 2. `costMenuItems`에서 `addedIngredients` 업데이트
+        const menuItemsSnapshot = await getDocs(collection(fireStore, "costMenuItems"));
+        const updatePromises: Promise<void>[] = [];
+  
+        menuItemsSnapshot.forEach((doc) => {
+          const menuData = doc.data() as CostMenu; // `CostMenu` 타입으로 지정
+  
+          if (menuData.addedIngredients?.includes(menuName)) {
+            const updatedIngredients = menuData.addedIngredients.filter(
+              (ingredient) => ingredient !== menuName
+            );
+            updatePromises.push(updateDoc(doc.ref, { addedIngredients: updatedIngredients }));
+          }
+        });
+  
+        await Promise.all(updatePromises);
+  
         alert("재료가 삭제되었습니다.");
         router.replace("/cost?view=ingredient");
       } catch (error) {
@@ -225,6 +251,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
       console.log("삭제가 취소되었습니다.");
     }
   };
+  
 
 
 
@@ -233,14 +260,14 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
   // 마크업 부분
   return (
     <div className="md:max-w-[1100px] md:mx-auto">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center mb-8">
         <div className="text-dark2 text-xl">
           {editingName ? (
             <div className="flex items-center"> 
               <input
                 type="text"
-                className="w-40 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
-                placeholder={String(newName)}
+                className="w-[200px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                placeholder={String(updatedMenu.name)}
                 onChange={(e) => setNewName(e.target.value)}
               />
               <button
@@ -252,7 +279,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
             </div>
           ) : (
             <div className="flex items-center">
-              {menu.name}
+              {updatedMenu.name}
               <button
                 onClick={handleEditName}
                 className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
@@ -262,7 +289,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
             </div>
           )}
         </div>
-        <button onClick={handleGoCost} className=" hover:bg-blue-500 hover:text-white hover:border-blue-500  px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300">
+        <button onClick={handleGoCost} className=" hover:bg-blue-500 hover:text-white hover:border-blue-500  px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 ml-auto">
           목록으로 돌아가기
         </button>
       </div>
@@ -523,7 +550,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
       </div>
       <div className="flex">
         <button
-          onClick={handleDeleteMenu}
+          onClick={() => handleDeleteMenu(menu.id, updatedMenu.name)} 
           className="ml-auto px-2 py-1 rounded-md cursor-pointer bg-red-600 border border-red-600  text-white text-xs"
         >
          재료 삭제하기
