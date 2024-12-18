@@ -325,7 +325,7 @@ export default function CostMenuDetail({
   const handleGoCost = () => {
     router.push(`/cost`);
   };
-  console.log(selectedNames);
+
 
   // 마크업 부분
   return (
@@ -681,7 +681,7 @@ export default function CostMenuDetail({
 {/* / 재료추가 */}
 <button
   onClick={openModal}
-  className="mb-7 px-3 py-2 cursor-pointer rounded-md text-sm border bg-blue-500 text-white border-blue-500"
+  className="mb-7 px-2 py-1 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
 >
   {updatedMenu.addedIngredients && updatedMenu.addedIngredients.length > 0
     ? "재료 수정하기"
@@ -694,6 +694,7 @@ export default function CostMenuDetail({
           selectedNames={selectedNames}
           setSelectedNames={setSelectedNames}
           handleSaveAddedIngredients={handleSaveAddedIngredients}
+          setIsModalOpen={setIsModalOpen}
         />
       )}
 
