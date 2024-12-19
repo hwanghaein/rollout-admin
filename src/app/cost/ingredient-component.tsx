@@ -104,7 +104,7 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
   );
 
   return (
-    <>
+    <div className="min-h-screen">
       <div className="flex mb-3">
         {/* 검색창 */}
         <div className="mb-2 flex items-center">
@@ -113,15 +113,15 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="재료 이름 검색"
-            className="w-full px-3 py-2 border border-gray-300 rounded text-sm "
+             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-400 rounded text-sm bg-white dark:bg-gray-900 text-black dark:text-gray-200 focus:outline-none"
           />
-          <FaSearch className=" text-gray-500 text-3xl ml-2" />
+          <FaSearch className="text-gray-500 dark:text-gray-400 text-3xl ml-2" />
         </div>
 
         {/* 재료 추가 버튼 */}
         <div className=" ml-auto">
           <button
-            className="px-3 py-2 cursor-pointer bg-blue-500 text-white rounded text-sm border border-blue-500"
+            className="px-3 py-2 cursor-pointer bg-blue-500 text-white rounded text-sm border border-blue-500 dark:bg-blue-800 dark:border-blue-800 dark:text-gray-200"
             onClick={() => setIsModalOpen(true)}
           >
             재료 추가
@@ -132,24 +132,24 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
       {/* 재료 추가 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded-md shadow-lg w-80">
-            <h2 className="mb-4 text-md">새 재료 추가</h2>
+          <div className="bg-white dark:bg-gray-900 p-4 rounded-md shadow-lg w-80">
+          <h2 className="mb-4 text-md text-black dark:text-gray-200">새 재료 추가</h2>
             <input
               type="text"
               value={newIngredientName}
               onChange={handleIngredientNameChange}
               placeholder="재료 이름을 입력하세요"
-              className="w-full px-2 py-2 border border-gray-300 rounded mb-4 text-sm"
+                         className="w-full focus:outline-none px-4 py-2 border border-gray-300 dark:border-gray-700 rounded mb-4 text-sm bg-white dark:bg-gray-900 text-black dark:text-gray-200"
             />
             <div className="flex justify-end gap-2">
               <button
-                className="px-2 py-1 bg-gray-300 rounded text-sm"
+             className="px-2 py-1 bg-gray-300 dark:bg-gray-700 text-black dark:text-gray-200 rounded text-sm hover:bg-gray-400 dark:hover:bg-gray-600"
                 onClick={() => setIsModalOpen(false)}
               >
                 취소
               </button>
               <button
-                className="px-2 py-1 bg-blue-500 text-white rounded text-sm"
+                         className="px-2 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
                 onClick={handleAddIngredient}
               >
                 추가
@@ -161,13 +161,13 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
 
       {/* 재료 목록 */}
       <div className="overflow-x-auto">
-        <table className="min-w-full text-sm text-left text-dark2">
-          <thead className="bg-gray-300">
+        <table className="min-w-full text-sm text-left text-dark2 dark:text-gray-200">
+        <thead className="bg-gray-300 dark:bg-gray-700">
             <tr>
-              <th className=" min-w-[95px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
+              <th className=" min-w-[95px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 dark:border-gray-600 text-center dark:text-gray-200">
                 재료명
               </th>
-              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
+              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200  dark:border-gray-600 text-center dark:text-gray-200">
                 개당 원가
               </th>
             </tr>
@@ -176,13 +176,13 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
             {filteredIngredients.map((item) => (
               <tr
                 key={item.id}
-                className="border-b border-gray-200 hover:bg-gray-100 hover:cursor-pointer"
+                className="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-800"
                 onClick={() => handleClick(item.id)}
               >
-                <td className="px-4 py-3 border-x border-gray-200 break-words max-w-[115px] hover:underline hover:text-blue-600">
+                <td className="px-4 py-3 border-x  border-gray-200 dark:border-gray-600 break-words max-w-[115px] hover:underline hover:text-blue-600 dark:hover:text-blue-500">
                   {item.name}
                 </td>
-                <td className="px-3 py-2 border-x border-gray-200">
+                <td className="px-3 py-2 border-x border-gray-200 dark:border-gray-600 ">
                   {item.costPerPiece === 0
                     ? "0원"
                     : `${Number(item.costPerPiece).toFixed(0)}원`}
@@ -192,9 +192,9 @@ export default function IngredientComponent({ costIngredients }: CostIngredientP
           </tbody>
         </table>
       </div>
-      <div className="mt-5 text-sm text-gray-600">
+      <div className="mt-5 text-sm text-gray-600 dark:text-gray-400">
         총 {filteredIngredients.length}개의 재료가 등록돼있습니다.
       </div>
-    </>
+    </div>
   );
 }

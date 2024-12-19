@@ -11,7 +11,7 @@ export default async function Page() {
 
   return (
     <AuthenticatedRoute>
-      <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20 bg-white dark:bg-gray-900 text-black dark:text-white">
+      <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20 bg-white dark:bg-gray-900 text-black dark:text-gray-200">
         <span className="text-dark2 dark:text-gray-200 text-xl mb-5">MENU COST</span>
         <ContentSwitcher
           costMenuList={costMenuList}

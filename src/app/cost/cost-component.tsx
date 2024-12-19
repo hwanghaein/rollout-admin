@@ -131,9 +131,8 @@ export default function CostClient({
   const filteredMenus = calculatedMenus.filter((menu) =>
     menu.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
   return (
-    <>
+    <div className="min-h-screen">
       <div className="flex mb-3">
         {/* 검색창 */}
         <div className="mb-2 flex items-center">
@@ -142,15 +141,15 @@ export default function CostClient({
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="메뉴 이름 검색"
-            className="w-full px-3 py-2 border border-gray-300 rounded text-sm "
+           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-400 rounded text-sm bg-white dark:bg-gray-900 text-black dark:text-gray-200 focus:outline-none"
           />
-          <FaSearch className=" text-gray-500 text-3xl ml-2" />
+          <FaSearch className="text-gray-500 dark:text-gray-400 text-3xl ml-2" />
         </div>
 
         {/* 메뉴 추가 버튼 */}
-        <div className=" ml-auto">
+        <div className="ml-auto">
           <button
-            className="px-3 py-2 cursor-pointer bg-blue-500 text-white rounded text-sm border border-blue-500"
+            className="px-3 py-2 cursor-pointer bg-blue-500 text-white rounded text-sm border border-blue-500 dark:bg-blue-800 dark:border-blue-800 dark:text-gray-200"
             onClick={() => setIsModalOpen(true)}
           >
             메뉴 추가
@@ -161,24 +160,26 @@ export default function CostClient({
       {/* 메뉴 추가 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded-md shadow-lg w-80">
-            <h2 className="mb-4 text-md">새 메뉴 추가</h2>
+          <div className="bg-white dark:bg-gray-900 p-4 rounded-md shadow-lg w-80">
+            <h2 className="mb-4 text-md text-black dark:text-gray-200">
+              새 메뉴 추가
+            </h2>
             <input
               type="text"
               value={newMenuName}
               onChange={handleMenuNameChange}
               placeholder="메뉴 이름을 입력하세요"
-              className="w-full px-4 py-2 border border-gray-300 rounded mb-4 text-sm"
+              className="w-full focus:outline-none px-4 py-2 border border-gray-300 dark:border-gray-700 rounded mb-4 text-sm bg-white dark:bg-gray-900 text-black dark:text-gray-200"
             />
             <div className="flex justify-end gap-2">
               <button
-                className="px-2 py-1 bg-gray-300 rounded text-sm"
+                className="px-2 py-1 bg-gray-300 dark:bg-gray-700 text-black dark:text-gray-200 rounded text-sm hover:bg-gray-400 dark:hover:bg-gray-600"
                 onClick={() => setIsModalOpen(false)}
               >
                 취소
               </button>
               <button
-                className="px-2 py-1 bg-blue-500 text-white rounded text-sm"
+                className="px-2 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
                 onClick={handleAddMenu}
               >
                 추가
@@ -190,19 +191,19 @@ export default function CostClient({
 
       {/* 메뉴 목록 */}
       <div className="overflow-x-auto">
-        <table className="min-w-full text-sm text-left text-dark2">
-          <thead className="bg-gray-300">
+        <table className="min-w-full text-sm text-left text-dark2 dark:text-gray-200">
+          <thead className="bg-gray-300 dark:bg-gray-700">
             <tr>
-              <th className=" min-w-[95px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
+              <th className="min-w-[95px] px-3 py-2 font-bold text-dark2 dark:text-gray-200 border-x border-gray-200 dark:border-gray-600 text-center">
                 메뉴명
               </th>
-              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
+              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 dark:text-gray-200 border-x border-gray-200 dark:border-gray-600 text-center">
                 총 원가
               </th>
-              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
+              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 dark:text-gray-200 border-x border-gray-200 dark:border-gray-600 text-center">
                 판매가
               </th>
-              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 border-x border-gray-200 text-center">
+              <th className="min-w-[75px] px-3 py-2 font-bold text-dark2 dark:text-gray-200 border-x border-gray-200 dark:border-gray-600 text-center">
                 마진율
               </th>
             </tr>
@@ -211,13 +212,13 @@ export default function CostClient({
             {filteredMenus.map((item) => (
               <tr
                 key={item.id}
-                className="border-b border-gray-200 hover:bg-gray-100 hover:cursor-pointer"
+                className="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 hover:cursor-pointer"
                 onClick={() => handleClick(item.id)}
               >
-                <td className="px-4 py-3 border-x border-gray-200 break-words max-w-[115px] hover:underline hover:text-blue-600">
+                <td className="px-4 py-3 border-x border-gray-200 dark:border-gray-600 break-words max-w-[115px] hover:underline hover:text-blue-600 dark:hover:text-blue-500">
                   {item.name}
                 </td>
-                <td className="px-3 py-2 border-x border-gray-200">
+                <td className="px-3 py-2 border-x border-gray-200 dark:border-gray-600">
                   {/* 총원가 */}
                   {item.totalCost === 0
                     ? "0원"
@@ -231,11 +232,11 @@ export default function CostClient({
                             : 0)
                       ).toFixed(0)}원`}
                 </td>
-                <td className="px-3 py-2 border-x border-gray-200">
-                  {/* 판매가 */}
+                {/* 판매가 */}
+                <td className="px-3 py-2 border-x border-gray-200 dark:border-gray-600">
                   {Number(item.pricePerPiece).toFixed(0)}원
                 </td>
-                <td className="px-3 py-2 border-x border-gray-200">
+                <td className="px-3 py-2 border-x border-gray-200 dark:border-gray-600">
                   {/* 마진율 */}
                   {item.margin === 0
                     ? "0%"
@@ -258,9 +259,9 @@ export default function CostClient({
           </tbody>
         </table>
       </div>
-      <div className="mt-5 text-sm text-gray-600">
+      <div className="mt-5 text-sm text-gray-600 dark:text-gray-400">
         총 {filteredMenus.length}개의 메뉴가 등록돼있습니다.
       </div>
-    </>
+    </div>
   );
 }
