@@ -10,25 +10,47 @@ import { useAuth } from "../app/context/auth-context";
 export default function Header() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 햄버거 메뉴의 토글 상태를 관리하는 상태 변수
-  const [isDarkMode, setIsDarkMode] = useState(false); // 다크 모드 상태를 관리하는 상태 변수
+  const [isBrightMode, setIsBrightMode] = useState<boolean>(false); // 밝은 모드 상태를 관리하는 상태 변수
   const { user, logout } = useAuth(); // 로그인 상태와 로그아웃 함수
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  // 다크 모드 상태 변경
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+  // 밝은 모드 상태 변경
+  const toggleBrightMode = () => {
+    setIsBrightMode((prev) => {
+      const newBrightMode = !prev;
+      // 상태 변경 시 로컬 스토리지에 저장
+      localStorage.setItem('brightMode', newBrightMode.toString());
+      return newBrightMode;
+    });
   };
 
-  // 다크 모드 상태에 따라 body class 변경
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-  }, [isDarkMode]);
+// 최초 렌더링 시 로컬 스토리지에서 테마 상태 읽어오기
+useEffect(() => {
+  const storedTheme = localStorage.getItem('theme');
+  if (storedTheme === 'dark') {
+    setIsBrightMode(false); // 다크 모드
+  } else if (storedTheme === 'light') {
+    setIsBrightMode(true); // 밝은 모드
+  } else {
+    // 로컬스토리지에 값이 없으면 시스템 설정을 확인하여 다크 모드를 적용
+    setIsBrightMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+}, []);
+
+// 밝은 모드 상태가 변경되면 body class 변경
+useEffect(() => {
+  if (isBrightMode) {
+    document.body.classList.add("light");
+    document.body.classList.remove("dark");
+    localStorage.setItem('theme', 'light');
+  } else {
+    document.body.classList.add("dark");
+    document.body.classList.remove("light");
+    localStorage.setItem('theme', 'dark');
+  }
+}, [isBrightMode]);
 
   return (
     <div>
@@ -37,7 +59,7 @@ export default function Header() {
           {/* 로고 아이콘 (다크 모드와 라이트 모드에 따라 다르게 설정) */}
           <Link href={"/"} className="flex gap-2 items-center flex-shrink-0">
             <Image
-              src={isDarkMode ? "/images/main/main_store_black_logo.png" : "/images/logo/logo_icon.png"}
+              src={isBrightMode ? "/images/logo/logo_icon.png" : "/images/main/main_store_black_logo.png"}
               alt="롤아웃 커피 로고 아이콘"
               width={45}
               height={45}
@@ -112,9 +134,9 @@ export default function Header() {
           </nav>
           <div className="flex items-center gap-3">
 
-            {/* 다크 모드 아이콘 */}
-            <button onClick={toggleDarkMode} className="p-2">
-              {isDarkMode ? (
+            {/* 밝은 모드 아이콘 */}
+            <button onClick={toggleBrightMode} className="p-2">
+              {isBrightMode ? (
                 <FaSun className="text-2xl text-gray1" />
               ) : (
                 <FaMoon className="text-2xl text-gray1" />
@@ -127,11 +149,11 @@ export default function Header() {
                 className="md:hidden p-2"
                 onClick={() => router.push('/mypage')}
               >
-                <FaUser className="text-2xl text-gray1 mr-3" />
+                <FaUser className="text-2xl text-gray1 " />
               </button>
             ) : (
               <button className="md:hidden p-2" onClick={() => router.push('/login')}>
-                <FaUser className="text-2xl text-gray1 mr-3" />
+                <FaUser className="text-2xl text-gray1 " />
               </button>
             )}
 
