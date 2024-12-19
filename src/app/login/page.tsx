@@ -19,7 +19,7 @@ export default function Page() {
       try {
         // Firebase 인증을 통한 로그인
         await signInWithEmailAndPassword(auth, email, password);
-        
+        alert("로그인 되었습니다.")
         router.push('/'); 
       } catch (err) {
         setError('이메일 또는 비밀번호가 올바르지 않습니다.');
