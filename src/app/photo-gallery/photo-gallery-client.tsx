@@ -22,7 +22,7 @@ export default function PhotoGalleryClient({
   };
   return (
     <>
-      <div  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 ">
+      <div  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 dark:bg-gray-900">
         {photos.map((item) => (
           <div  key={item.id} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => handlePhotoClick(item.id)}>
             <div className="overflow-hidden">

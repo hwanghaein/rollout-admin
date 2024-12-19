@@ -17,7 +17,7 @@ export default function PhotoDetailClient({
   return (
     <div className="flex flex-col items-center"> 
       {/* 폴라로이드 */}
-      <div className="bg-white border  border-gray-300 lg:max-w-[458px]  pb-10 pt-6 px-5 text-center shadow-md">
+      <div className="bg-white border  border-gray-300 lg:max-w-[458px]  pb-10 pt-6 px-5 text-center shadow-md mt-8 dark:bg-gray-200">
         <Image
           src={photo.image}
           alt={photo.alt}

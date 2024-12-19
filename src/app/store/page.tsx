@@ -25,7 +25,7 @@ export default function Page() {
   return (
     <AuthenticatedRoute>
       <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20 dark:bg-gray-900 ">
-        <span className="text-dark2 text-2xl mb-10 dark:text-gray-200">
+        <span className="text-dark2 text-xl mb-10 dark:text-gray-200">
           STORE
         </span>
         <Image
@@ -37,13 +37,13 @@ export default function Page() {
         />
         <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
           <span
-            className="text-2xl text-secondary dark:text-gray-400
+            className="text-xl text-secondary dark:text-gray-400
 "
           >
             Address
           </span>
           <span
-            className="text-lg text-dark4 dark:text-gray-200
+            className="text-md text-dark4 dark:text-gray-200
 "
           >
             경북 경주시 현곡면 금장 3길 4 1층
@@ -52,13 +52,13 @@ export default function Page() {
 
         <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
           <span
-            className="text-2xl text-secondary dark:text-gray-400
+            className="text-xl text-secondary dark:text-gray-400
 "
           >
             Opening Hours
           </span>
           <span
-            className="text-lg text-dark4 dark:text-gray-200
+            className="text-md text-dark4 dark:text-gray-200
 "
           >
             11:00~21:00, 매주 월요일 휴무
@@ -67,14 +67,14 @@ export default function Page() {
 
         <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
           <span
-            className="text-2xl text-secondary dark:text-gray-400
+            className="text-xl text-secondary dark:text-gray-400
 "
           >
             Telephone
           </span>
           <a
             href="tel:0507-1392-5605"
-            className="text-lg text-dark4 hover:text-blue-500 dark:text-gray-200
+            className="text-md text-dark4 hover:text-blue-500 dark:text-gray-200
 "
           >
             <div className="flex items-center">
@@ -90,13 +90,13 @@ export default function Page() {
 
         <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
           <span
-            className="text-2xl text-secondary dark:text-gray-400
+            className="text-xl text-secondary dark:text-gray-400
 "
           >
             Facilities
           </span>
           <span
-            className="text-lg text-dark4 dark:text-gray-200
+            className="text-md text-dark4 dark:text-gray-200
 "
           >
             남/녀 화장실 구분, 반려동물 동반, 무선 인터넷, 단체 이용 가능, 주차
@@ -105,13 +105,13 @@ export default function Page() {
 
         <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
           <span
-            className="text-2xl text-secondary dark:text-gray-400
+            className="text-xl text-secondary dark:text-gray-400
 "
           >
             Parking
           </span>
           <span
-            className="text-lg text-dark4 dark:text-gray-200
+            className="text-md text-dark4 dark:text-gray-200
 "
           >
             강변 및 건물 1층 무료 주차
@@ -120,13 +120,13 @@ export default function Page() {
 
         <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
           <span
-            className="text-2xl text-secondary dark:text-gray-400
+            className="text-xl text-secondary dark:text-gray-400
 "
           >
             Payment Methods
           </span>
           <span
-            className="text-lg text-dark4 dark:text-gray-200
+            className="text-md text-dark4 dark:text-gray-200
 "
           >
             신용카드, 현금, 제로페이, 네이버페이{" "}
@@ -135,7 +135,7 @@ export default function Page() {
 
         <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
           <span
-            className="text-2xl text-secondary dark:text-gray-400
+            className="text-xl text-secondary dark:text-gray-400
 "
           >
             Instagram
@@ -144,7 +144,7 @@ export default function Page() {
             href="https://www.instagram.com/rollout_coffee/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-lg text-dark4 hover:text-blue-500 dark:text-gray-200
+            className="text-md text-dark4 hover:text-blue-500 dark:text-gray-200
 "
           >
             <div className="flex items-center">
@@ -158,7 +158,7 @@ export default function Page() {
         </div>
 
         {/* <div className="flex flex-col gap-5 pb-7 mb-7 border-b-[1px] ">
-        <span className="text-2xl text-secondary">Directions</span>
+        <span className="text-xl text-secondary">Directions</span>
         <div>
           <KakaoMap latitude={latitude} longitude={longitude} placeName={placeName} />
         </div>

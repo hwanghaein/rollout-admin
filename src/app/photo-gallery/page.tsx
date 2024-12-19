@@ -15,7 +15,7 @@ export default async function Page() {
   return (
     <AuthenticatedRoute>
       <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20 dark:bg-gray-900 ">
-        <span className="text-dark2 text-2xl mb-10 dark:text-gray-200">PHOTO GALLERY</span>
+        <span className="text-dark2 text-xl mb-10 dark:text-gray-200">PHOTO GALLERY</span>
         <PhotoGalleryClient photos={photos} />
       </div>
     </AuthenticatedRoute>

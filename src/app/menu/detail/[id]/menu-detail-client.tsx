@@ -101,16 +101,16 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
         </div>
         <div className="flex flex-col w-full order-1 md:order-2">
           <div className="flex flex-col border-b-2 border-solid border-dark3 mb-7 dark:border-gray-600">
-            <span className="text-2xl text-dark2 mb-2 dark:text-white">
+            <span className="text-lg text-dark2 mb-2 dark:text-white">
               {menuItem.name}
             </span>
-            <span className="text-m text-gray2 mb-7 dark:text-gray-200">
+            <span className="text-md text-gray2 mb-7 dark:text-gray-200">
               {menuItem.engName}
             </span>
           </div>
           <div className="flex flex-col border-b-[1px] border-solid border-gray4 mb-7 dark:border-gray-600">
             <div className="flex items-center mb-7">
-              <span className="text-lg text-dark3 font-bold dark:text-gray-200">
+              <span className="text-md text-dark3 dark:text-gray-200">
                 • {menuItem.description}
               </span>
             </div>
@@ -121,7 +121,7 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
                 <span className="text-secondary font-bold text-lg mr-2 ">
                   Tip.
                 </span>
-                <span className="text-lg text-dark3 mb-7 inline-block dark:text-gray-200">
+                <span className="text-md text-dark3 mb-7 inline-block dark:text-gray-200">
                   {menuItem.tip}
                 </span>
               </div>
@@ -129,7 +129,7 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
           </div>
           {menuItem.temperature !== "none" && (
             <div className="border-b-[1px] border-solid border-gray4 dark:border-gray-600">
-              <span className="text-lg text-dark4 inline-block mb-7 dark:text-gray-200" >
+              <span className="text-md text-dark4 inline-block mb-7 dark:text-gray-200" >
                 {menuItem.temperature === "both"
                   ? "ICE / HOT"
                   : menuItem.temperature === "ice"

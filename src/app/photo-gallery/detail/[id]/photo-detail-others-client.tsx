@@ -35,7 +35,7 @@ export default function PhotoDetailOthersClient({
   }, [photos, currentPhotoId]);
 
   return (
-    <div className="flex flex-col justify-center items-center pt-4">
+    <div className="flex flex-col justify-center items-center pt-4 mb-8">
       <div className="grid grid-cols-2 gap-2">
         {otherPhotos.map((item) => (
           <div
