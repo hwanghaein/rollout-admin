@@ -78,17 +78,17 @@ export default function MyPage() {
 
   return (
     <AuthenticatedRoute>
-      <div className="flex flex-col px-4 md:w-full max-w-[1100px] mx-auto pt-7  md:mt-16">
-        <h1 className="text-xl font-bold text-dark2 mb-10">마이페이지</h1>
-        <h2 className="text-lg mb-4">계정 정보</h2>
+      <div className="flex flex-col px-4 md:w-full max-w-[1100px] mx-auto pt-7 md:mt-16 dark:bg-gray-900 dark:text-gray-200 min-h-screen">
+        <h1 className="text-xl font-bold text-dark2 dark:text-white mb-10">마이페이지</h1>
+        <h2 className="text-lg mb-4 dark:text-white">계정 정보</h2>
 
-        <div className="bg-gray-100 p-4 rounded-lg  mb-10">
-          <p className="text-dark2 text-sm mb-2 font-semibold">이메일</p>
-          <p className="text-dark2 text-sm">{user?.email}</p>
+        <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-10">
+          <p className="text-dark2 dark:text-white text-sm mb-2 font-semibold">이메일</p>
+          <p className="text-dark2 dark:text-white text-sm">{user?.email}</p>
         </div>
 
         <div className="mb-4">
-          <h2 className="text-lg  mb-4 ">비밀번호 변경</h2>
+          <h2 className="text-lg mb-4 dark:text-white">비밀번호 변경</h2>
 
           <div className="relative">
             <input
@@ -96,12 +96,12 @@ export default function MyPage() {
               placeholder="현재 비밀번호"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md mb-4 w-full text-sm "
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md mb-4 w-full text-sm dark:bg-gray-700 dark:text-white"
             />
             <button
               type="button"
               onClick={() => setShowCurrentPassword((prev) => !prev)} 
-              className="absolute top-3 right-3 text-gray-500"
+              className="absolute top-3 right-3 text-gray-500 dark:text-white"
             >
               {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -113,12 +113,12 @@ export default function MyPage() {
               placeholder="새 비밀번호"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md mb-4 w-full text-sm"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md mb-4 w-full text-sm dark:bg-gray-700 dark:text-white"
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)} 
-              className="absolute top-3 right-3 text-gray-500"
+              className="absolute top-3 right-3 text-gray-500 dark:text-white"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -130,12 +130,12 @@ export default function MyPage() {
               placeholder="비밀번호 확인"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md mb-2 w-full text-sm"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md mb-2 w-full text-sm dark:bg-gray-700 dark:text-white"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword((prev) => !prev)} 
-              className="absolute top-3 right-3 text-gray-500"
+              className="absolute top-3 right-3 text-gray-500 dark:text-white"
             >
               {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -144,7 +144,7 @@ export default function MyPage() {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             onClick={handlePasswordChange}
-            className="px-4 py-2 bg-gray-200 text-dark2 text-sm rounded-md focus:outline-none cursor-pointer mt-3"
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-dark2 dark:text-white text-sm rounded-md focus:outline-none cursor-pointer mt-3"
             disabled={isPasswordChanging}
           >
             {isPasswordChanging ? "변경 중..." : "비밀번호 변경"}

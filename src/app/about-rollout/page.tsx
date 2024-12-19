@@ -4,8 +4,9 @@ import AuthenticatedRoute from "../../components/authenticated-route";
 export default function Page() {
   return (
     <AuthenticatedRoute>
-      <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20">
-        <span className="text-dark2 text-2xl mb-10">ROLL OUT COFFEE</span>
+      <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20 dark:bg-gray-900
+">
+        <span className="text-dark2 text-2xl mb-10 dark:text-gray-200">ROLL OUT COFFEE</span>
         <Image
           src="/images/about-rollout/plane_img.png"
           alt="비행기"
@@ -13,10 +14,11 @@ export default function Page() {
           height={300}
           className="object-contain mb-12"
         />
-        <span className="text-2xl text-secondary mb-7">
+        <span className="text-2xl text-secondary mb-7 dark:text-gray-300
+">
           TAKE-OFF AND LANDING
         </span>
-        <div className="leading-loose text-lg text-dark4 border-gray-4 ">
+        <div className="leading-loose text-lg text-dark4 border-gray-4 dark:text-gray-200">
           Roll Out Coffee는 한 잔의 커피에 새로운 커피 경험을 선보입니다. <br />
           "Roll out"은 “신형 비행기가 첫 공개나 전시를 앞두고 활주로를 벗어나는
           순간”을 의미합니다.

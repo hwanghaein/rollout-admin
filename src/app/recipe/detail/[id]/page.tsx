@@ -18,7 +18,7 @@ export default async function Page(props: { params: tParams }) {
 
   return (
     <AuthenticatedRoute>
-      <div className="p-4 text-xs">
+      <div className="p-4 text-xs dark:bg-gray-900 dark:text-gray-200 min-h-screen">
         <RecipeDetailComponent menu={menu} costIngredients={costIngredients} />
       </div>
     </AuthenticatedRoute>

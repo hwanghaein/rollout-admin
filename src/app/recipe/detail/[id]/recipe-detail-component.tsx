@@ -27,27 +27,27 @@ const router= useRouter();
   return (
     <div className="md:max-w-[1100px] md:mx-auto">
       <div className="flex justify-between mb-8">
-      <div className="text-dark2 text-xl">{menu.name}</div>
+      <div className="text-dark2 text-xl dark:text-white">{menu.name}</div>
       <button
           onClick={handleGoList}
-          className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300"
+          className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-300"
         >
           목록으로 돌아가기
         </button>
         </div>
       <div className="mb-4">
-        <table className="min-w-full rounded-lg border border-gray-300">
-          <thead className="bg-gray-300">
+        <table className="min-w-full rounded-lg border border-gray-300 dark:border-gray-500">
+          <thead className="bg-gray-300 dark:bg-gray-700 dark:text-white">
             <tr>
               <th
-                className="px-1 py-1 border-r border-b text-center"
+                className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                 colSpan={2} 
                 style={{ minWidth: "150px" }}
               >
                 재료명
               </th>
               <th
-                className="px-1 py-1 border-b text-center"
+                className="px-1 py-1 border-b text-center dark:border-gray-500"
                 style={{ minWidth: "60px" }}
               >
                 사용량
@@ -59,14 +59,14 @@ const router= useRouter();
             {menu.ingredients.map((ingredient, index) => (
               <tr key={`ingredient-${index}`}>
                 <td
-                  className="px-1 py-1 border-r border-b text-center"
+                  className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                   colSpan={2}
                   style={{ minWidth: "150px" }}
                 >
                   {ingredient.name}
                 </td>
                 <td
-                  className="px-1 py-1 border-b text-center"
+                  className="px-1 py-1 border-b text-center dark:border-gray-500"
                   style={{ minWidth: "60px" }}
                 >
                   {ingredient.usageQuantity}g
@@ -87,7 +87,7 @@ const router= useRouter();
                     {/* 메인 재료명 */}
                     {subIndex === 0 && (
                       <td
-                        className="px-1 py-1 border-r border-b text-center"
+                        className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                         rowSpan={costIngredient.ingredients.length} 
                         style={{
                           verticalAlign: "middle",
@@ -101,14 +101,14 @@ const router= useRouter();
                     )}
                     {/* 세부 재료명 */}
                     <td
-                      className="px-1 py-1 border-r border-b text-center"
+                      className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                       style={{ minWidth: "60px" }}
                     >
                       {ingredient.name}
                     </td>
                     {/* 사용량 */}
                     <td
-                      className="px-1 py-1 border-b text-center"
+                      className="px-1 py-1 border-b text-center dark:border-gray-500"
                       style={{ minWidth: "90px" }}
                     >
                       {ingredient.usageQuantity}g

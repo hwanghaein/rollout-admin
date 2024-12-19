@@ -266,30 +266,30 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
             <div className="flex items-center"> 
               <input
                 type="text"
-                className="w-[200px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                className="w-[200px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1  dark:bg-gray-800 dark:text-white dark:border-gray-500"
                 placeholder={String(updatedMenu.name)}
                 onChange={(e) => setNewName(e.target.value)}
               />
               <button
                 onClick={handleSaveName}
-                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500  dark:bg-blue-600 dark:border-blue-600"
               >
                 저장
               </button>
             </div>
           ) : (
-            <div className="flex items-center">
+            <div className="flex items-center  dark:text-white">
               {updatedMenu.name}
               <button
                 onClick={handleEditName}
-                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
               >
                 수정
               </button>
             </div>
           )}
         </div>
-        <button onClick={handleGoCost} className=" hover:bg-blue-500 hover:text-white hover:border-blue-500  px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 ml-auto">
+        <button onClick={handleGoCost} className=" hover:bg-blue-500 hover:text-white hover:border-blue-500  px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black dark:bg-gray-700 dark:border-gray-300 dark:text-gray-200 border-gray-300 ml-auto">
           목록으로 돌아가기
         </button>
       </div>
@@ -299,16 +299,16 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
 
           {/* 판매 개수 */}
           <div className="flex items-center">
-            <div className="overflow-hidden border border-gray-300 min-h-[52px] min-w-[115px]">
-              <div className="bg-gray-300 font-bold px-2 py-1 text-center">
+            <div className="overflow-hidden border border-gray-300 min-h-[52px] dark:border-gray-500 min-w-[115px]">
+              <div className="bg-gray-300 font-bold px-2 py-1 text-center dark:bg-gray-700 dark:text-white">
                 판매 개수
               </div>
-              <div className="bg-white px-2 py-1">
+              <div className="bg-white px-2 py-1 dark:bg-gray-900 dark:text-white">
                 {editingQuantity ? (
                   <div className="text-center">
                     <input
                       type="number"
-                      className="w-[75px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 "
+                      className="w-[75px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                       placeholder={String(newQuantity)}
                       onChange={(e) => setNewQuantity(Number(e.target.value))}
                     />
@@ -328,8 +328,8 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
               <button
                 className={`ml-2 px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                   editingQuantity
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
+                    ? "bg-blue-500 text-white border-blue-500 dark:bg-blue-600 dark:border-blue-600"
+                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
                 }`}
                 onClick={
                   editingQuantity ? handleSaveQuantity : handleEditQuantity
@@ -344,29 +344,29 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
 
       <div className="mb-4">
         <div>
-          <table className="min-w-full rounded-lg border border-gray-300">
-            <thead className="bg-gray-300">
+          <table className="min-w-full rounded-lg border border-gray-300 dark:border-gray-500">
+            <thead className="bg-gray-300 dark:bg-gray-700 dark:text-white">
               <tr>
                 <th
-                  className="px-1 py-1 border-r border-b text-center"
+                  className="px-1 py-1 border-r border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "90px" }}
                 >
                   재료명
                 </th>
                 <th
-                  className="px-1 py-1 border-r border-b text-center"
+                  className="px-1 py-1 border-r border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "60px" }}
                 >
                   구매가
                 </th>
                 <th
-                  className="px-1 py-1 border-r border-b text-center"
+                  className="px-1 py-1 border-r border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "60px" }}
                 >
                   구매량
                 </th>
                 <th
-                  className="px-1 py-1 border-b text-center"
+                  className="px-1 py-1 border-b text-center  dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "60px" }}
                 >
                   사용량
@@ -377,14 +377,14 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
               {ingredients.map((ingredient, index) => (
                 <tr key={index}>
                   <td
-                    className="px-1 py-1 border-r border-b text-center"
+                    className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                     style={{ minWidth: "90px" }}
                   >
                     {editingIngredients ? (
                       <div className="flex items-center">
                         <input // 부재료명
                           type="text"
-                          className="w-[88px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                          className="w-[88px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                           placeholder={String(ingredient.name)}
                           onChange={(e) =>
                             handleIngredientChange(
@@ -396,7 +396,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                         />
                         <button
                           onClick={() => handleDeleteIngredient(index)}
-                          className="px-1 items-center bg-gray-100 border-y border-r border-gray-300 text-gray-700"
+                          className="px-1 items-center bg-gray-100 border border-gray-300 text-gray-700 dark:bg-gray-400 dark:border-gray-300" 
                         >
                           X
                         </button>
@@ -406,7 +406,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                     )}
                   </td>
                   <td
-                    className="px-1 py-1 border-r border-b text-center"
+                    className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                     style={{ minWidth: "60px" }}
                   >
                     <div className="flex items-center justify-center">
@@ -414,7 +414,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                         <>
                           <input // 구매가
                             type="number"
-                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                             placeholder={String(ingredient.purchasePrice)}
                             onChange={(e) =>
                               handleIngredientChange(
@@ -432,7 +432,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                     </div>
                   </td>
                   <td
-                    className="px-1 py-1 border-r border-b text-center"
+                    className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                     style={{ minWidth: "60px" }}
                   >
                     <div className="flex items-center justify-center">
@@ -440,7 +440,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                         <>
                           <input // 구매량
                             type="number"
-                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1  dark:bg-gray-800 dark:text-white dark:border-gray-500"
                             placeholder={String(ingredient.purchaseQuantity)}
                             onChange={(e) =>
                               handleIngredientChange(
@@ -458,7 +458,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                     </div>
                   </td>
                   <td
-                    className="px-1 py-1 border-b text-center"
+                    className="px-1 py-1 border-b text-center  dark:border-gray-500"
                     style={{ minWidth: "60px" }}
                   >
                     <div className="flex items-center justify-center">
@@ -466,7 +466,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
                         <>
                           <input // 사용량
                             type="number"
-                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                             placeholder={String(ingredient.usageQuantity)}
                             onChange={(e) => {
                               const updatedIngredients = [...ingredients];
@@ -490,7 +490,7 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
           {editingIngredients && (
             <div className="">
               <button
-                className="w-full px-2 py-1 text-md bg-[#e5e7eb] text-dark2 font-bold"
+                className="w-full px-2 py-1 text-md bg-[#e5e7eb] text-dark2 font-bold dark:bg-gray-400"
                 onClick={handleAddRow}
               >
                 +
@@ -505,8 +505,8 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
             <button
               className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                 editingIngredients
-                  ? "bg-blue-500 text-white border-blue-500"
-                  : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
+                        ? "bg-blue-500 text-white border-blue-500 dark:bg-blue-600 dark:border-blue-600"
+                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
               }`}
               onClick={
                 editingIngredients
@@ -521,27 +521,27 @@ export default function CostIngredientDetailComponent({ menu }: { menu: CostIngr
       </div>
       {/* 계산 결과  */}
       <div className="mb-8">
-        <table className="min-w-full rounded-lg border border-gray-300">
+        <table className="min-w-full rounded-lg border border-gray-300 dark:border-gray-500">
           <thead className="bg-gray-300">
             <tr>
-              <th className="px-2 py-1 border-r border-b text-center">항목</th>
-              <th className="px-2 py-1 border-b text-center">값</th>
+              <th className="px-2 py-1 border-r border-b text-cente  dark:bg-gray-700 dark:text-white dark:border-gray-500">항목</th>
+              <th className="px-2 py-1 border-b text-center  dark:bg-gray-700 dark:text-white dark:border-gray-500">값</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 총 원가
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(calculatedMenu.totalCost).toFixed(0)}원
               </td>
             </tr>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 개당 원가
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(calculatedMenu.costPerPiece).toFixed(0)}원
               </td>
             </tr>

@@ -22,12 +22,12 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
 
   return (
     <>
-      <span className="text-dark2 text-2xl mb-10">
+      <span className="text-dark2 text-2xl mb-10 dark:text-white">
         {formatCategory(menuItem.category)}
       </span>
       <div className="flex flex-col md:flex-row gap-10">
         <div className="md:order-1 order-2">
-          <div className="relative max-w-[450px] overflow-hidden bg-dark2">
+          <div className="relative max-w-[450px] overflow-hidden bg-dark2 dark:bg-gray-800">
             {Array.isArray(menuItem.images) && menuItem.images.length > 1 ? (
               <Swiper
                 style={
@@ -53,7 +53,7 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
                       height={470}
                       className="object-cover"
                       priority
-                       loading="eager"
+                      loading="eager"
                     />
                   </SwiperSlide>
                 ))}
@@ -67,7 +67,7 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
                   height={470}
                   className="object-cover"
                   priority
-                   loading="eager"
+                  loading="eager"
                 />
               )
             )}
@@ -91,7 +91,7 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
                       height={60}
                       className="object-cover cursor-pointer"
                       priority
-                       loading="eager"
+                      loading="eager"
                     />
                   </SwiperSlide>
                 ))}
@@ -100,13 +100,17 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
           </div>
         </div>
         <div className="flex flex-col w-full order-1 md:order-2">
-          <div className="flex flex-col border-b-2 border-solid border-dark3 mb-7">
-            <span className="text-2xl text-dark2 mb-2">{menuItem.name}</span>
-            <span className="text-m text-gray2 mb-7">{menuItem.engName}</span>
+          <div className="flex flex-col border-b-2 border-solid border-dark3 mb-7 dark:border-gray-600">
+            <span className="text-2xl text-dark2 mb-2 dark:text-white">
+              {menuItem.name}
+            </span>
+            <span className="text-m text-gray2 mb-7 dark:text-gray-200">
+              {menuItem.engName}
+            </span>
           </div>
-          <div className="flex flex-col border-b-[1px] border-solid border-gray4 mb-7">
+          <div className="flex flex-col border-b-[1px] border-solid border-gray4 mb-7 dark:border-gray-600">
             <div className="flex items-center mb-7">
-              <span className="text-lg text-dark3 font-bold">
+              <span className="text-lg text-dark3 font-bold dark:text-gray-200">
                 • {menuItem.description}
               </span>
             </div>
@@ -117,15 +121,15 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
                 <span className="text-secondary font-bold text-lg mr-2 ">
                   Tip.
                 </span>
-                <span className="text-lg text-dark3 mb-7 inline-block">
+                <span className="text-lg text-dark3 mb-7 inline-block dark:text-gray-200">
                   {menuItem.tip}
                 </span>
               </div>
             )}
           </div>
           {menuItem.temperature !== "none" && (
-            <div className="border-b-[1px] border-solid border-gray4">
-              <span className="text-lg text-dark4 inline-block mb-7">
+            <div className="border-b-[1px] border-solid border-gray4 dark:border-gray-600">
+              <span className="text-lg text-dark4 inline-block mb-7 dark:text-gray-200" >
                 {menuItem.temperature === "both"
                   ? "ICE / HOT"
                   : menuItem.temperature === "ice"

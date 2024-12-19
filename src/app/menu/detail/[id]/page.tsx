@@ -15,7 +15,7 @@ export default async function Page(props: { params: tParams }) {
 
   return (
     <AuthenticatedRoute>
-      <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20">
+      <div className="px-4 md:w-full max-w-[1100px] mx-auto flex flex-col pt-7 pb-20 dark:bg-gray-900 dark:text-gray-200 ">
         <MenuDetailClient menuItem={menuItem} />
       </div>
     </AuthenticatedRoute>

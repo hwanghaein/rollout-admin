@@ -54,15 +54,15 @@ const MenuClient = ({ menuItems }: { menuItems: MenuItem[] }) => {
   });
 
   return (
-    <div>
-      <div className="p-5 flex flex-col border-[1px] border-solid border-gray4 rounded-md mb-10">
-        <div className="flex pb-4 border-b-[1px] border-gray-4 justify-between items-center">
-          <div className="text-md text-dark2">메뉴 검색</div>
-          <div className="border-[1px] border-solid border-gray-4 rounded-md relative overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-white">
+      <div className="p-5 flex flex-col border-[1px] border-solid border-gray-300 rounded-md mb-10 dark:border-gray-700">
+        <div className="flex pb-4 border-b-[1px] border-gray-300 justify-between items-center dark:border-gray-700">
+          <div className="text-md text-gray-800 dark:text-white">메뉴 검색</div>
+          <div className="border-[1px] border-solid border-gray-300 rounded-md relative overflow-hidden dark:border-gray-700">
             <input
               type="text"
               placeholder="검색"
-              className="w-full pl-3 pr-10 py-2 text-sm rounded-md border-none focus:outline-none"
+              className="w-full pl-3 pr-10 py-2 text-sm rounded-md border-none focus:outline-none dark:bg-gray-800 dark:text-white"
               value={searchQuery} 
               onChange={handleSearchChange} 
               maxLength={13}
@@ -80,13 +80,14 @@ const MenuClient = ({ menuItems }: { menuItems: MenuItem[] }) => {
           </div>
         </div>
         <div>
-          <ul className="grid grid-cols-2 gap-4 md:grid-cols-4 text-sm text-dark1 mt-5">
+          <ul className="grid grid-cols-2 gap-4 md:grid-cols-4 text-sm text-gray-800 dark:text-gray-200 mt-5">
             {menuCategories.map(({ label, value }) => (
               <li key={value} className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={filters[value as FilterKeys]}
                   onChange={() => handleFilterChange(value as FilterKeys)}
+                  className="dark:bg-gray-600"
                 />
                 <span>{label}</span>
               </li>
@@ -96,7 +97,7 @@ const MenuClient = ({ menuItems }: { menuItems: MenuItem[] }) => {
       </div>
 
       {filteredItems.length === 0 ? (
-        <div className="flex justify-center items-center text-lg text-gray-500 font-semibold py-10">
+        <div className="flex justify-center items-center text-lg text-gray-500 font-semibold py-10 dark:text-gray-400">
           검색 결과가 없습니다
         </div>
       ) : (
@@ -113,11 +114,11 @@ const MenuClient = ({ menuItems }: { menuItems: MenuItem[] }) => {
                   alt={item.alt}
                   width={258}
                   height={270}
-                  className="object-cover transform transition-transform duration-500 hover:scale-110 !important"
+                  className="object-cover transform transition-transform duration-500 hover:scale-110"
                   priority
                 />
               </div>
-              <span className="text-sm text-dark4">{item.name}</span>
+              <span className="text-sm text-gray-700 dark:text-gray-200">{item.name}</span>
             </div>
           ))}
         </div>
