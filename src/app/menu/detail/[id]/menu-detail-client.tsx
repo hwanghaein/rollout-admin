@@ -9,9 +9,32 @@ import Image from "next/image";
 import { useState } from "react";
 import { Swiper as SwiperType } from "swiper";
 import { MenuItem } from "../../../../types/menu-item";
+import { doc, updateDoc } from "firebase/firestore";
+import fireStore from "../../../../../firebase/firestore";
 
 export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [updatedItem, setUpdatedItem] = useState(menuItem);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setUpdatedItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const menuItemRef = doc(fireStore, "menuItems", menuItem.id);
+      await updateDoc(menuItemRef, updatedItem);
+      alert("수정이 완료되었습니다.");
+      setEditing(false);
+    } catch (error) {
+      console.error("Error updating document: ", error);
+      alert("수정 중 오류가 발생했습니다.");
+    }
+  };
 
   const formatCategory = (category: string) => {
     if (category === "sweetTea") {
@@ -22,9 +45,40 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
 
   return (
     <>
-      <span className="text-dark2 text-2xl mb-10 dark:text-white">
-        {formatCategory(menuItem.category)}
-      </span>
+      <div className="flex justify-center items-center mb-10">
+        <span className="text-dark2 text-2xl dark:text-white">
+        {editing ? (
+  <select
+    name="category"
+    value={updatedItem.category}
+    onChange={handleInputChange}
+    className="border border-gray-300 rounded-md px-2 py-1"
+  >
+    <option value="signature">Signature</option>
+    <option value="coffee">Coffee</option>
+    <option value="drip">Drip</option>
+    <option value="drink">Drink</option>
+    <option value="sweetTea">Sweet Tea</option>
+    <option value="tea">Tea</option>
+    <option value="dessert">Dessert</option>
+  </select>
+) : (
+  <span className="text-md text-dark4 inline-block mb-7 dark:text-gray-200">
+    {formatCategory(updatedItem.category)}
+  </span>
+)}
+        </span>
+        <button
+          className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-sm border ${
+            editing
+              ? "bg-blue-500 text-white border-blue-500 dark:bg-blue-600 dark:border-blue-600"
+              : "bg-white text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
+          }`}
+          onClick={editing ? handleSave : () => setEditing(true)}
+        >
+          {editing ? "완료" : "수정"}
+        </button>
+      </div>
       <div className="flex flex-col md:flex-row gap-10">
         <div className="md:order-1 order-2">
           <div className="relative max-w-[450px] overflow-hidden bg-dark2 dark:bg-gray-800">
@@ -59,7 +113,8 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
                 ))}
               </Swiper>
             ) : (
-              Array.isArray(menuItem.images) && menuItem.images.length > 0 && (
+              Array.isArray(menuItem.images) &&
+              menuItem.images.length > 0 && (
                 <Image
                   src={menuItem.images[0]}
                   alt={menuItem.alt || "Menu Item Image"}
@@ -102,16 +157,45 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
         <div className="flex flex-col w-full order-1 md:order-2">
           <div className="flex flex-col border-b-2 border-solid border-dark3 mb-7 dark:border-gray-600">
             <span className="text-lg text-dark2 mb-2 dark:text-white">
-              {menuItem.name}
+              {editing ? (
+                <input
+                  type="text"
+                  name="name"
+                  value={updatedItem.name}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 rounded-md px-2 py-1"
+                />
+              ) : (
+                updatedItem.name
+              )}
             </span>
             <span className="text-md text-gray2 mb-7 dark:text-gray-200">
-              {menuItem.engName}
+              {editing ? (
+                <input
+                  type="text"
+                  name="engName"
+                  value={updatedItem.engName}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 rounded-md px-2 py-1"
+                />
+              ) : (
+                updatedItem.engName
+              )}
             </span>
           </div>
           <div className="flex flex-col border-b-[1px] border-solid border-gray4 mb-7 dark:border-gray-600">
             <div className="flex items-center mb-7">
               <span className="text-md text-dark3 dark:text-gray-200">
-                • {menuItem.description}
+                {editing ? (
+                  <textarea
+                    name="description"
+                    value={updatedItem.description}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 w-full"
+                  />
+                ) : (
+                  `• ${updatedItem.description}`
+                )}
               </span>
             </div>
             {menuItem.tip === "none" ? (
@@ -122,21 +206,56 @@ export default function MenuDetailClient({ menuItem }: { menuItem: MenuItem }) {
                   Tip.
                 </span>
                 <span className="text-md text-dark3 mb-7 inline-block dark:text-gray-200">
-                  {menuItem.tip}
+                  {editing ? (
+                    <input
+                      type="text"
+                      name="tip"
+                      value={updatedItem.tip}
+                      onChange={handleInputChange}
+                      className="border border-gray-300 rounded-md px-2 py-1 w-full"
+                    />
+                  ) : (
+                    updatedItem.tip
+                  )}
                 </span>
               </div>
             )}
           </div>
-          {menuItem.temperature !== "none" && (
+          {editing ? (
+            // 수정 모드 - Select 요소로 온도 선택
             <div className="border-b-[1px] border-solid border-gray4 dark:border-gray-600">
-              <span className="text-md text-dark4 inline-block mb-7 dark:text-gray-200" >
-                {menuItem.temperature === "both"
-                  ? "ICE / HOT"
-                  : menuItem.temperature === "ice"
-                  ? "ONLY ICE"
-                  : "ONLY HOT"}
-              </span>
+              <label
+                htmlFor="temperature"
+                className="text-md text-dark4 inline-block mb-2 dark:text-gray-200"
+              >
+                온도 선택:
+              </label>
+              <select
+                id="temperature"
+                name="temperature"
+                value={updatedItem.temperature}
+                onChange={handleInputChange}
+                className="border border-gray-300 rounded-md px-2 py-1"
+              >
+                <option value="both">Both</option>
+                <option value="hot">Hot</option>
+                <option value="ice">Ice</option>
+                <option value="none">None</option>
+              </select>
             </div>
+          ) : (
+            // 읽기 모드 - 텍스트로 온도 표시
+            menuItem.temperature !== "none" && (
+              <div className="border-b-[1px] border-solid border-gray4 dark:border-gray-600">
+                <span className="text-md text-dark4 inline-block mb-7 dark:text-gray-200">
+                  {menuItem.temperature === "both"
+                    ? "ICE / HOT"
+                    : menuItem.temperature === "ice"
+                    ? "ONLY ICE"
+                    : "ONLY HOT"}
+                </span>
+              </div>
+            )
           )}
         </div>
       </div>
