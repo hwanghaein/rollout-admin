@@ -20,9 +20,9 @@ export default function ContentSwitcher({
   useEffect(() => {
     const viewParam = searchParams.get("view");
     if (viewParam === "ingredient" || viewParam === "menu") {
-      setView(viewParam); 
+      setView(viewParam);
     } else {
-      setView("menu"); 
+      setView("menu");
     }
   }, [searchParams]);
 
@@ -32,7 +32,9 @@ export default function ContentSwitcher({
       <div className="flex text-sm space-x-4 mb-6">
         <button
           className={`px-3 py-2 rounded ${
-            view === "menu" ? "bg-primary text-white" : "bg-gray-200"
+            view === "menu"
+              ? "bg-primary text-white"
+              : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
           }`}
           onClick={() => setView("menu")}
         >
@@ -40,7 +42,9 @@ export default function ContentSwitcher({
         </button>
         <button
           className={`px-3 py-2 rounded ${
-            view === "ingredient" ? "bg-primary text-white" : "bg-gray-200"
+            view === "ingredient"
+              ? "bg-primary text-white"
+              : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
           }`}
           onClick={() => setView("ingredient")}
         >
@@ -49,7 +53,12 @@ export default function ContentSwitcher({
       </div>
 
       {/* 조건부 렌더링 */}
-      {view === "menu" && <CostComponent costMenuList={costMenuList}  costIngredients={costIngredients}/>}
+      {view === "menu" && (
+        <CostComponent
+          costMenuList={costMenuList}
+          costIngredients={costIngredients}
+        />
+      )}
       {view === "ingredient" && (
         <IngredientComponent costIngredients={costIngredients} />
       )}
