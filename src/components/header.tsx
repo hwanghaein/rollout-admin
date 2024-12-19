@@ -2,28 +2,42 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { FaBars, FaTimes, FaUser } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaBars, FaTimes, FaUser, FaMoon, FaSun } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "../app/context/auth-context";
 
 export default function Header() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 햄버거 메뉴의 토글 상태를 관리하는 상태 변수
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false); 
+  const [isDarkMode, setIsDarkMode] = useState(false); // 다크 모드 상태를 관리하는 상태 변수
   const { user, logout } = useAuth(); // 로그인 상태와 로그아웃 함수
 
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
+  // 다크 모드 상태 변경
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  // 다크 모드 상태에 따라 body class 변경
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  }, [isDarkMode]);
 
   return (
     <div>
       <header className="z-50 top-0 w-full h-20 bg-primary flex justify-between items-center px-3 md:px-5 max-w-full mx-auto gap-5">
         <div className="w-full max-w-[1100px] mx-auto flex justify-between items-center">
-          {/* 로고 아이콘 */}
+          {/* 로고 아이콘 (다크 모드와 라이트 모드에 따라 다르게 설정) */}
           <Link href={"/"} className="flex gap-2 items-center flex-shrink-0">
             <Image
-              src="/images/logo/logo_icon.png"
+              src={isDarkMode ? "/images/main/main_store_black_logo.png" : "/images/logo/logo_icon.png"}
               alt="롤아웃 커피 로고 아이콘"
               width={45}
               height={45}
@@ -80,14 +94,12 @@ export default function Header() {
                 <li>포토 갤러리</li>
               </Link>
               {user ? (
-     
-                  <Link
-                    href={"/mypage"}
-                    className="px-5 h-full flex items-center justify-center"
-                  >
-                    <li>마이페이지</li>
-                  </Link>
-
+                <Link
+                  href={"/mypage"}
+                  className="px-5 h-full flex items-center justify-center"
+                >
+                  <li>마이페이지</li>
+                </Link>
               ) : (
                 <Link
                   href={"/login"}
@@ -98,10 +110,19 @@ export default function Header() {
               )}
             </ul>
           </nav>
-          <div>
+          <div className="flex items-center gap-3">
 
-          {/* 로그인 버튼 - 모바일과 태블릿에서만 보이도록 설정  */}
-          {user ? (
+            {/* 다크 모드 아이콘 */}
+            <button onClick={toggleDarkMode} className="p-2">
+              {isDarkMode ? (
+                <FaSun className="text-2xl text-gray1" />
+              ) : (
+                <FaMoon className="text-2xl text-gray1" />
+              )}
+            </button>
+
+            {/* 로그인 버튼 - 모바일과 태블릿에서만 보이도록 설정 */}
+            {user ? (
               <button
                 className="md:hidden p-2"
                 onClick={() => router.push('/mypage')}
@@ -114,15 +135,15 @@ export default function Header() {
               </button>
             )}
 
-          {/* 햄버거 버튼 - 모바일과 태블릿에서만 보이도록 설정 */}
-          <button className="md:hidden p-2" onClick={toggleMenu}>
-            <FaBars className="text-2xl text-gray1" />
-          </button>
+            {/* 햄버거 버튼 - 모바일과 태블릿에서만 보이도록 설정 */}
+            <button className="md:hidden p-2" onClick={toggleMenu}>
+              <FaBars className="text-2xl text-gray1" />
+            </button>
           </div>
         </div>
       </header>
 
-      {/* 햄버거 버튼을 누르면 나타나는 메뉴 (태블릿, 모바일)) */}
+      {/* 햄버거 버튼을 누르면 나타나는 메뉴 (태블릿, 모바일) */}
       <aside
         className={`md:hidden w-64 fixed right-0 inset-y-0 bg-brown1 transition-transform duration-300 z-50 transform ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
