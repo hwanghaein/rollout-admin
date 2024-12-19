@@ -52,17 +52,17 @@ export default function SearchModal({
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
       onClick={handleBackgroundClick}
     >
-      <div className="bg-white w-[360px] h-[500px] p-6 rounded-lg shadow-lg animate-fadeIn flex flex-col relative">
-        <div className="flex justify-between items-center ">
-          <span className="text-xl text-dark2">재료 검색</span>
+      <div className="bg-white dark:bg-gray-800 w-[360px] h-[500px] p-6 rounded-lg shadow-lg animate-fadeIn flex flex-col relative">
+        <div className="flex justify-between items-center">
+          <span className="text-xl text-dark2 dark:text-white">재료 검색</span>
           <input
             type="text"
             placeholder="검색어를 입력하세요"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="ml-4 px-3 py-1 border border-gray-300 rounded text-sm w-[180px]"
+            className="ml-4 px-3 py-1 border border-gray-300 dark:border-gray-500 rounded text-sm w-[180px] dark:bg-gray-700 dark:text-white dark:outline-none"
           />
-          <FaSearch className="text-gray-500 text-lg ml-2" />
+          <FaSearch className="text-gray-500 dark:text-white text-lg ml-2" />
         </div>
 
         {/* 리스트 */}
@@ -71,7 +71,7 @@ export default function SearchModal({
             {filteredIngredients.map((ingredient) => (
               <li
                 key={ingredient.id}
-                className="text-sm p-2 bg-gray-100 rounded"
+                className="text-sm p-2 bg-gray-100 dark:bg-gray-700 rounded"
               >
                 <label className="flex items-center">
                   <input
@@ -81,13 +81,13 @@ export default function SearchModal({
                     onChange={() => handleCheckboxChange(ingredient.name)}
                     className="mr-2"
                   />
-                  {ingredient.name}
+                  <span className="dark:text-white">{ingredient.name}</span>
                 </label>
               </li>
             ))}
           </ul>
         </div>
-        <div className="flex flex-col text-blue-600 gap-1 mt-5">
+        <div className="flex flex-col text-blue-600 dark:text-gray-200 gap-1 mt-5">
           <span>* 체크된 항목들이 재료 목록에 반영됩니다.</span>
           <span>* 삭제를 하려면 체크를 해제하세요.</span>
         </div>
@@ -95,18 +95,17 @@ export default function SearchModal({
         <div className="flex mt-4 gap-5">
           <button
             onClick={handleSubmit}
-            className="px-3 py-2 ml-auto text-white rounded-lg bg-blue-500 text-sm"
+            className="px-3 py-2 ml-auto text-white rounded-lg bg-blue-500 text-sm dark:bg-blue-800"
           >
             저장하기
           </button>
           <button
             onClick={closeModal}
-            className="px-3 py-2 text-black rounded-lg bg-gray-300 text-sm"
+            className="px-3 py-2 text-black dark:text-white rounded-lg bg-gray-300 dark:bg-gray-600 text-sm"
           >
             취소
           </button>
         </div>
-
       </div>
     </div>
   );

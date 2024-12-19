@@ -48,7 +48,7 @@ export default function CostMenuDetail({
 
   // 모달 열기
   const openModal = () => {
-    setSelectedNames(updatedMenu.addedIngredients || [])
+    setSelectedNames(updatedMenu.addedIngredients || []);
     setIsModalOpen(true);
   };
 
@@ -327,7 +327,6 @@ export default function CostMenuDetail({
     router.push(`/cost`);
   };
 
-
   // 마크업 부분
   return (
     <div className="md:max-w-[1100px] md:mx-auto">
@@ -337,23 +336,23 @@ export default function CostMenuDetail({
             <div className="flex items-center">
               <input
                 type="text"
-                className="w-[200px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                className="w-[200px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                 placeholder={String(updatedMenu.name)}
                 onChange={(e) => setNewName(e.target.value)}
               />
               <button
                 onClick={handleSaveName}
-                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500 dark:bg-blue-600 dark:border-blue-600"
               >
                 저장
               </button>
             </div>
           ) : (
-            <div className="flex items-center">
+            <div className="flex items-center dark:text-white">
               {updatedMenu.name}
               <button
                 onClick={handleEditName}
-                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
+                className="px-2 py-1 ml-2 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200 "
               >
                 수정
               </button>
@@ -363,7 +362,7 @@ export default function CostMenuDetail({
 
         <button
           onClick={handleGoCost}
-          className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black border-gray-300 ml-auto"
+          className="hover:bg-blue-500 hover:text-white hover:border-blue-500 px-2 py-1 cursor-pointer rounded-md text-xs border bg-white  text-black dark:bg-gray-700 dark:border-gray-300 dark:text-gray-200 border-gray-300 ml-auto"
         >
           목록으로 돌아가기
         </button>
@@ -373,19 +372,20 @@ export default function CostMenuDetail({
       <div className="mb-4 mt-5">
         <div className="grid grid-cols-2 gap-4 ">
           <div>
-            <div className="overflow-hidden border border-gray-300 min-h-[52px]">
-              <div className="bg-gray-300 font-bold text-center px-2 py-1">
+            <div className="overflow-hidden border border-gray-300 min-h-[52px] dark:border-gray-500">
+              <div className="bg-gray-300 font-bold text-center px-2 py-1 dark:bg-gray-700">
                 개당 판매가
               </div>
-              <div className="bg-white px-1 py-1">
+              <div className="bg-white px-1 py-1  dark:bg-gray-900 dark:text-white">
                 {editingPrice ? (
                   <div className="text-center">
                     <input
                       type="number"
-                      className="w-[50px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                      className="w-[50px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                       placeholder={String(newPrice)}
                       onChange={(e) => setNewPrice(Number(e.target.value))}
                     />
+
                     <span className="ml-1">원</span>
                   </div>
                 ) : (
@@ -403,8 +403,8 @@ export default function CostMenuDetail({
               <button
                 className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                   editingPrice
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
+                    ? "bg-blue-500 text-white border-blue-500 dark:bg-blue-600 dark:border-blue-600"
+                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
                 }`}
                 onClick={editingPrice ? handleSavePrice : handleEditPrice}
               >
@@ -413,19 +413,20 @@ export default function CostMenuDetail({
             </div>
           </div>
           <div>
-            <div className="overflow-hidden border border-gray-300 min-h-[52px]">
-              <div className="bg-gray-300 font-bold px-2 py-1 text-center">
+            <div className="overflow-hidden border border-gray-300 min-h-[52px] dark:border-gray-500">
+              <div className="bg-gray-300 font-bold px-2 py-1 text-center dark:bg-gray-700 dark:text-white">
                 판매 개수
               </div>
-              <div className="bg-white px-2 py-1">
+              <div className="bg-white px-2 py-1 dark:bg-gray-900 dark:text-white">
                 {editingQuantity ? (
                   <div className="text-center">
                     <input
                       type="number"
-                      className="w-[50px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 "
+                      className="w-[50px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                       placeholder={String(newQuantity)}
                       onChange={(e) => setNewQuantity(Number(e.target.value))}
                     />
+
                     <span className="ml-1">개</span>
                   </div>
                 ) : (
@@ -442,8 +443,8 @@ export default function CostMenuDetail({
               <button
                 className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                   editingQuantity
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
+                    ? "bg-blue-500 text-white border-blue-500  dark:bg-blue-600 dark:border-blue-600"
+                    : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
                 }`}
                 onClick={
                   editingQuantity ? handleSaveQuantity : handleEditQuantity
@@ -458,29 +459,29 @@ export default function CostMenuDetail({
 
       <div className="mb-4">
         <div>
-          <table className="min-w-full rounded-lg border border-gray-300">
-            <thead className="bg-gray-300">
+          <table className="min-w-full rounded-lg border border-gray-300 dark:border-gray-500">
+            <thead className="bg-gray-300 dark:bg-gray-700 dark:text-white">
               <tr>
                 <th
-                  className="px-1 py-1 border-r border-b text-center"
+                  className="px-1 py-1 border-r border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "90px" }}
                 >
                   재료명
                 </th>
                 <th
-                  className="px-1 py-1 border-r border-b  text-center"
+                  className="px-1 py-1 border-r border-b  text-center dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "60px" }}
                 >
                   구매가
                 </th>
                 <th
-                  className="px-1 py-1 border-r border-b text-center"
+                  className="px-1 py-1 border-r border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "60px" }}
                 >
                   구매량
                 </th>
                 <th
-                  className="px-1 py-1 border-b text-center"
+                  className="px-1 py-1 border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500"
                   style={{ minWidth: "60px" }}
                 >
                   사용량
@@ -491,14 +492,14 @@ export default function CostMenuDetail({
               {ingredients.map((ingredient, index) => (
                 <tr key={index}>
                   <td
-                    className="px-1 py-1 border-r border-b text-center"
+                    className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                     style={{ minWidth: "90px" }}
                   >
                     {editingIngredients ? (
-                      <div className="flex items-center">
+                      <div className="flex items-center ">
                         <input // 재료명
                           type="text"
-                          className="w-[88px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                          className="w-[88px] focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                           placeholder={String(ingredient.name)}
                           onChange={(e) =>
                             handleIngredientChange(
@@ -508,9 +509,10 @@ export default function CostMenuDetail({
                             )
                           }
                         />
+
                         <button
                           onClick={() => handleDeleteIngredient(index)}
-                          className="px-1 items-center bg-gray-100 border-y border-x border-gray-300 text-gray-700"
+                          className="px-1 items-center bg-gray-100 border-y border-x border-gray-300  text-gray-700 dark:bg-gray-400 dark:border-gray-300"
                         >
                           X
                         </button>
@@ -520,15 +522,15 @@ export default function CostMenuDetail({
                     )}
                   </td>
                   <td
-                    className="px-1 py-1 border-r border-b text-center"
+                    className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                     style={{ minWidth: "60px" }}
                   >
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center ">
                       {editingIngredients ? (
                         <>
                           <input // 구매가
                             type="number"
-                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                             placeholder={String(ingredient.purchasePrice)}
                             onChange={(e) =>
                               handleIngredientChange(
@@ -538,6 +540,7 @@ export default function CostMenuDetail({
                               )
                             }
                           />
+
                           <span className="ml-1">원</span>
                         </>
                       ) : (
@@ -546,7 +549,7 @@ export default function CostMenuDetail({
                     </div>
                   </td>
                   <td
-                    className="px-1 py-1 border-r border-b text-center"
+                    className="px-1 py-1 border-r border-b text-center dark:border-gray-500"
                     style={{ minWidth: "60px" }}
                   >
                     <div className="flex items-center justify-center">
@@ -554,7 +557,7 @@ export default function CostMenuDetail({
                         <>
                           <input // 구매량
                             type="number"
-                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                             placeholder={String(ingredient.purchaseQuantity)}
                             onChange={(e) =>
                               handleIngredientChange(
@@ -564,6 +567,7 @@ export default function CostMenuDetail({
                               )
                             }
                           />
+
                           <span className="ml-1">g</span>
                         </>
                       ) : (
@@ -572,7 +576,7 @@ export default function CostMenuDetail({
                     </div>
                   </td>
                   <td
-                    className="px-1 py-1 border-b text-center"
+                    className="px-1 py-1 border-b text-center dark:border-gray-500"
                     style={{ minWidth: "60px" }}
                   >
                     <div className="flex items-center justify-center">
@@ -580,7 +584,7 @@ export default function CostMenuDetail({
                         <>
                           <input // 사용량
                             type="number"
-                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1"
+                            className="w-full focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 pl-1 dark:bg-gray-800 dark:text-white dark:border-gray-500"
                             placeholder={String(ingredient.usageQuantity)}
                             onChange={(e) => {
                               const updatedIngredients = [...ingredients];
@@ -590,6 +594,7 @@ export default function CostMenuDetail({
                               setIngredients(updatedIngredients);
                             }}
                           />
+
                           <span className="ml-1">g</span>
                         </>
                       ) : (
@@ -604,7 +609,7 @@ export default function CostMenuDetail({
           {editingIngredients && (
             <div className="">
               <button
-                className="w-full px-2 py-1 text-md bg-[#e5e7eb] text-dark2 font-bold"
+                className="w-full px-2 py-1 text-md bg-[#e5e7eb] text-dark2 font-bold dark:bg-gray-400"
                 onClick={handleAddRow}
               >
                 +
@@ -619,8 +624,8 @@ export default function CostMenuDetail({
             <button
               className={`ml-auto px-2 py-1 cursor-pointer rounded-md text-xs mt-1 border  ${
                 editingIngredients
-                  ? "bg-blue-500 text-white border-blue-500"
-                  : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500"
+                  ? "bg-blue-500 text-white border-blue-500  dark:bg-blue-600 dark:border-blue-600"
+                  : "bg-white  text-black border-gray-300 hover:bg-blue-500 hover:text-white hover:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
               }`}
               onClick={
                 editingIngredients
@@ -635,43 +640,47 @@ export default function CostMenuDetail({
       </div>
       {/* 계산 결과  */}
       <div className="mb-12">
-        <table className="min-w-full rounded-lg border border-gray-300">
-          <thead className="bg-gray-300">
+        <table className="min-w-full rounded-lg border border-gray-300 dark:border-gray-500 ">
+          <thead className="bg-gray-300 dark:bg-gray-700 ">
             <tr>
-              <th className="px-2 py-1 border-r border-b text-center">항목</th>
-              <th className="px-2 py-1 border-b text-center">값</th>
+              <th className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
+                항목
+              </th>
+              <th className="px-2 py-1 border-b text-center dark:border-gray-500">
+                값
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 총 원가
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(calculatedMenu.totalCost).toFixed(0)}원
               </td>
             </tr>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 개당 원가
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(calculatedMenu.costPerPiece).toFixed(0)}원
               </td>
             </tr>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 마진율
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(calculatedMenu.margin).toFixed(2)}%
               </td>
             </tr>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 개당 수익
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(calculatedMenu.profitPerPiece).toFixed(0)}원
               </td>
             </tr>
@@ -679,15 +688,15 @@ export default function CostMenuDetail({
         </table>
       </div>
 
-{/* / 재료추가 */}
-<button
-  onClick={openModal}
-  className="mb-7 px-2 py-1 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500"
->
-  {updatedMenu.addedIngredients && updatedMenu.addedIngredients.length > 0
-    ? "재료 수정하기"
-    : "재료 추가하기"}
-</button>
+      {/* / 재료추가 */}
+      <button
+        onClick={openModal}
+        className="mb-7 px-2 py-1 cursor-pointer rounded-md text-xs border bg-blue-500 text-white border-blue-500 dark:bg-blue-600 dark:border-blue-600"
+      >
+        {updatedMenu.addedIngredients && updatedMenu.addedIngredients.length > 0
+          ? "재료 수정하기"
+          : "재료 추가하기"}
+      </button>
 
       {isModalOpen && (
         <SearchModal
@@ -711,15 +720,20 @@ export default function CostMenuDetail({
       </div>
 
       <div className="mb-12">
-        <table className="min-w-full rounded-lg border border-gray-300">
-          <thead className="bg-gray-300">
+        <table className="min-w-full rounded-lg border border-gray-300 dark:border-gray-500">
+          <thead className="bg-gray-300 ">
             <tr>
-              <th className="px-2 py-1 border-r border-b text-center">항목</th>
-              <th className="px-2 py-1 border-b text-center">개당 원가</th>
+              <th className="px-2 py-1 border-r border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500">
+                항목
+              </th>
+              <th className="px-2 py-1 border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500">
+                개당 원가
+              </th>
             </tr>
           </thead>
           <tbody>
-            {updatedMenu.addedIngredients === undefined || updatedMenu.addedIngredients?.length === 0 ? (
+            {updatedMenu.addedIngredients === undefined ||
+            updatedMenu.addedIngredients?.length === 0 ? (
               <tr>
                 <td colSpan={2} className="px-2 py-1 text-center text-gray-500">
                   "재료 추가하기"를 눌러서 재료를 추가해보세요!
@@ -730,10 +744,10 @@ export default function CostMenuDetail({
                 const costPerPiece = getCostPerPiece(name); // 각 재료의 개당 원가 계산
                 return (
                   <tr key={name}>
-                    <td className="px-2 py-1 border-r border-b text-center">
+                    <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                       {name}
                     </td>
-                    <td className="px-2 py-1 border-b text-center">
+                    <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                       {Number(costPerPiece).toFixed(0)}원
                     </td>
                   </tr>
@@ -747,19 +761,23 @@ export default function CostMenuDetail({
       <div className="text-sm font-bold mb-4">재료 추가 시 최종 원가</div>
 
       <div className="mb-12">
-        <table className="min-w-full rounded-lg border border-gray-300">
+        <table className="min-w-full rounded-lg border border-gray-300 dark:border-gray-500">
           <thead className="bg-gray-300">
             <tr>
-              <th className="px-2 py-1 border-r border-b text-center">항목</th>
-              <th className="px-2 py-1 border-b text-center">값</th>
+              <th className="px-2 py-1 border-r border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500">
+                항목
+              </th>
+              <th className="px-2 py-1 border-b text-center dark:bg-gray-700 dark:text-white dark:border-gray-500">
+                값
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 개당 원가
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {(
                   Number(calculatedMenu.costPerPiece) +
                   (updatedMenu.addedIngredients?.length
@@ -773,10 +791,10 @@ export default function CostMenuDetail({
               </td>
             </tr>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 마진율
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(
                   calculateMargin(
                     updatedMenu.pricePerPiece, // 1개당 판매가
@@ -793,10 +811,10 @@ export default function CostMenuDetail({
               </td>
             </tr>
             <tr>
-              <td className="px-2 py-1 border-r border-b text-center">
+              <td className="px-2 py-1 border-r border-b text-center dark:border-gray-500">
                 개당 수익
               </td>
-              <td className="px-2 py-1 border-b text-center">
+              <td className="px-2 py-1 border-b text-center dark:border-gray-500">
                 {Number(
                   calculateProfitPerPiece(
                     updatedMenu.pricePerPiece, // 1개당 판매가
